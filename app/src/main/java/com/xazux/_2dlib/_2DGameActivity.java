@@ -60,7 +60,7 @@ public abstract class _2DGameActivity extends Activity
     void doInit()
     {
         if (_bInitalized)
-            Log.wtf(this.getClass().getSimpleName(), "doInit() has been called more than once!");
+            Log.e(this.getClass().getSimpleName(), "doInit() has been called more than once!");
         Log.d(this.getClass().getSimpleName(), "Begin initalizing activity.");
         onInit();
         _bInitalized = true;
@@ -73,7 +73,7 @@ public abstract class _2DGameActivity extends Activity
 
     public abstract void onDraw(Canvas canvas);
 
-    public abstract void onDestroy();
+    public abstract void onFinished();
 
     public void setDesiredFPS(int fps) {
         _thread.setFPS(fps);
