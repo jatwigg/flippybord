@@ -3,49 +3,51 @@ package com.xazux._2dlib.sprites.components;
 import com.xazux._2dlib.JMath;
 import com.xazux._2dlib.components.Vector2D;
 
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
 
 public class CRect implements CollisionArea 
 {
-	protected int m_iLeft, m_iTop, m_iRight, m_iBottom, m_iWidth, m_iHeight, m_iCenterX, m_iCenterY;
+	protected float m_fLeft, m_fTop, m_fRight, m_fBottom, m_fWidth, m_fHeight, m_fCenterX, m_fCenterY;
 	protected float m_fRotation;
 	protected Vector2D m_vOrigin;
 	
-	public CRect(int left, int top, int right, int bottom)
+	public CRect(float left, float top, float right, float bottom)
 	{
-		m_iLeft = left;
-		m_iTop = top;
-		m_iRight = right;
-		m_iBottom = bottom;
-		m_iWidth = m_iRight - m_iLeft;
-		m_iHeight = m_iBottom - m_iTop;
+		m_fLeft = left;
+		m_fTop = top;
+		m_fRight = right;
+		m_fBottom = bottom;
+		m_fWidth = m_fRight - m_fLeft;
+		m_fHeight = m_fBottom - m_fTop;
 		m_fRotation = 0.0f;
 		m_vOrigin = new Vector2D(0.5f,0.5f);
 		setCenter();
 	}
 	
-	public CRect(Rect screenRect)
+	public CRect(Rect r)
 	{
-		this(screenRect.left,screenRect.top,screenRect.right,screenRect.bottom);
+		this(r.left, r.top, r.right, r.bottom);
 	}
 
 	public CRect(CRect cloneThis)
 	{
-		m_iLeft = cloneThis.m_iLeft;
-		m_iTop = cloneThis.m_iTop;
-		m_iRight = cloneThis.m_iRight;
-		m_iBottom = cloneThis.m_iBottom;
-		m_iWidth =  cloneThis.m_iWidth;
-		m_iHeight = cloneThis.m_iHeight;
+		m_fLeft = cloneThis.m_fLeft;
+		m_fTop = cloneThis.m_fTop;
+		m_fRight = cloneThis.m_fRight;
+		m_fBottom = cloneThis.m_fBottom;
+		m_fWidth =  cloneThis.m_fWidth;
+		m_fHeight = cloneThis.m_fHeight;
 		m_fRotation = cloneThis.m_fRotation;
 		m_vOrigin = new Vector2D(cloneThis.m_vOrigin.getX(),cloneThis.m_vOrigin.getY());
 		setCenter();
 	}
 
-	public boolean containsPoint(int x, int y) 
+	public boolean containsPoint(float x, float y)
 	{
 		//if (m_fRotation < 0.001f)
-		return (x>m_iLeft && x< m_iRight && y > m_iTop && y < m_iBottom)?true:false;
+		return (x> m_fLeft && x< m_fRight && y > m_fTop && y < m_fBottom)?true:false;
 		//else
 		//{
 			// check if lines intersect
@@ -57,100 +59,105 @@ public class CRect implements CollisionArea
 	{
 		return containsPoint(position.getRoundedX(), position.getRoundedY());
 	}
-	
-	public int getWidth() 
+
+    @Override
+    public void render(Canvas canvas, Paint paint) {
+        canvas.drawRect(m_fLeft, m_fTop, m_fRight, m_fBottom, paint);
+    }
+
+    public float getWidth()
 	{
-		return m_iWidth;
+		return m_fWidth;
 	}
 
-	public int getHeight() 
+	public float getHeight()
 	{
-		return m_iHeight;
+		return m_fHeight;
 	}
 
-	public void offsetTo(int x, int y)
+	public void offsetTo(float x, float y)
 	{
-		m_iLeft = x;
-		m_iRight = x + m_iWidth;
-		m_iTop = y;
-		m_iBottom = y + m_iHeight;
+		m_fLeft = x;
+		m_fRight = x + m_fWidth;
+		m_fTop = y;
+		m_fBottom = y + m_fHeight;
 		setCenter();
 	}
 	
-	public void offsetBy(int x, int y)
+	public void offsetBy(float x, float y)
 	{
-		m_iLeft += x;
-		m_iRight += x;
-		m_iCenterX += x;
-		m_iTop += y;
-		m_iBottom += y;
-		m_iCenterY += y;
+		m_fLeft += x;
+		m_fRight += x;
+		m_fCenterX += x;
+		m_fTop += y;
+		m_fBottom += y;
+		m_fCenterY += y;
 	}
 
 	private void setCenter()
 	{
-		m_iCenterX = m_iLeft + (m_iWidth/2);
-		m_iCenterY = m_iTop + (m_iHeight/2);
+		m_fCenterX = m_fLeft + (m_fWidth * 0.5f);
+		m_fCenterY = m_fTop + (m_fHeight * 0.5f);
 	}
 
-	public void offsetSoCenterIs(int x, int y)
+	public void offsetSoCenterIs(float x, float y)
 	{
-		m_iLeft = x - (m_iWidth/2);
-		m_iRight = x + (m_iWidth/2);
-		m_iTop = y - (m_iHeight/2);
-		m_iBottom = y +(m_iHeight/2);
+		m_fLeft = x - (m_fWidth * 0.5f);
+		m_fRight = x + (m_fWidth * 0.5f);
+		m_fTop = y - (m_fHeight * 0.5f);
+		m_fBottom = y +(m_fHeight * 0.5f);
 		setCenter();
 	}
 
-	public int getCenterX()
+	public float getCenterX()
 	{
-		return m_iCenterX;
+		return m_fCenterX;
 	}
 
-	public int getCenterY()
+	public float getCenterY()
 	{
-		return m_iCenterY;
+		return m_fCenterY;
 	}
 
-	public int getLeft()
+	public float getLeft()
 	{
-		return m_iLeft;
+		return m_fLeft;
 	}
 
-	public int getTop()
+	public float getTop()
 	{
-		return m_iTop;
+		return m_fTop;
 	}
 
-	public int getRight()
+	public float getRight()
 	{
-		return m_iRight;
+		return m_fRight;
 	}
 
-	public int getBottom()
+	public float getBottom()
 	{
-		return m_iBottom;
+		return m_fBottom;
 	}
 
 	public boolean intersects(CRect otherRect)
 	{
-		return !(otherRect.m_iRight < m_iLeft || otherRect.m_iLeft > m_iRight
-				|| otherRect.m_iBottom < m_iTop || otherRect.m_iTop > m_iBottom);
+		return !(otherRect.m_fRight < m_fLeft || otherRect.m_fLeft > m_fRight
+				|| otherRect.m_fBottom < m_fTop || otherRect.m_fTop > m_fBottom);
 	}
 
 	public boolean intersects(CCircle circle)
 	{
 		// Find the closest point to the circle within the rectangle
-		float closestX = JMath.Clamp(circle.m_iCenterX, m_iLeft, m_iRight);
-		float closestY = JMath.Clamp(circle.m_iCenterY, m_iTop, m_iBottom);
+		float closestX = JMath.Clamp(circle.m_fCenterX, m_fLeft, m_fRight);
+		float closestY = JMath.Clamp(circle.m_fCenterY, m_fTop, m_fBottom);
 
 		// Calculate the distance between the circle's center and this closest point
-		float distanceX = circle.m_iCenterX - closestX;
-		float distanceY = circle.m_iCenterY - closestY;
+		float distanceX = circle.m_fCenterX - closestX;
+		float distanceY = circle.m_fCenterY - closestY;
 
 		// If the distance is less than the circle's radius, an intersection occurs
 		float distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
-		return (distanceSquared < (circle.m_iRadius * circle.m_iRadius));
+		return (distanceSquared < (circle.m_fRadius * circle.m_fRadius));
 	}
 
 	public float getRotationDegrees()
@@ -178,16 +185,9 @@ public class CRect implements CollisionArea
 		return new CRect(this);
 	}
 
-	public static Rect ConvertToRect(CollisionArea carea)
-	{
-		return new Rect(carea.getLeft(), carea.getTop(),
-				carea.getRight(), carea.getBottom());
-	}
-
 	public static CRect CreateUsingWidthAndHeight(float left, float top, float width, float height)
 	{
-		return new CRect((int)(left + 0.5f), (int)(top + 0.5f), 
-				(int)(left + width + 0.5f), (int)(top + height + 0.5f));
+		return new CRect(left, top, left + width, top + height);
 	}
 
 	public static CRect ConvertFromCollisionArea(CollisionArea cArea)

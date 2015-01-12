@@ -40,7 +40,7 @@ public class Particle
 	{
 		m_fPositionX += m_vVelocityPS.getX() * gameTime.getElapsedSeconds();
 		m_fPositionY += m_vVelocityPS.getY() * gameTime.getElapsedSeconds();
-		m_areaOnScreen.offsetTo((int)(m_fPositionX + 0.5f),(int)(m_fPositionY + 0.5f));
+		m_areaOnScreen.offsetTo(m_fPositionX, m_fPositionY);
 		return m_lifeSpanElapser.UpdateAndHasTimeElapsed(gameTime);
 	}
 

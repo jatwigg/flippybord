@@ -1,37 +1,40 @@
 package com.xazux._2dlib.sprites.components;
 
+import android.graphics.Canvas;
+import android.graphics.Paint;
+
 import com.xazux._2dlib.JMath;
 import com.xazux._2dlib.components.Vector2D;
 
 public class CCircle implements CollisionArea
 {
-	protected int m_iLeft, m_iTop, m_iRight, m_iBottom, m_iCenterX, m_iCenterY, m_iRadius;
+	protected float m_fLeft, m_fTop, m_fRight, m_fBottom, m_fCenterX, m_fCenterY, m_fRadius;
 	protected float m_fRotation;
 	protected Vector2D m_vOrigin;
 	
-	public CCircle(int centerX, int centerY, int radius)
+	public CCircle(float centerX, float centerY, float radius)
 	{
-		m_iCenterX = centerX;
-		m_iCenterY = centerY;
+		m_fCenterX = centerX;
+		m_fCenterY = centerY;
 		m_vOrigin = new Vector2D(0.5f,0.5f);
-		m_iRadius = radius;
+		m_fRadius = radius;
 		m_fRotation = 0.0f;
 		updateSides();
 	}
 
 	private void updateSides()
 	{
-		m_iLeft = m_iCenterX - m_iRadius;
-		m_iTop = m_iCenterY - m_iRadius;
-		m_iRight = m_iCenterX + m_iRadius;
-		m_iBottom = m_iCenterY + m_iRadius;
+		m_fLeft = m_fCenterX - m_fRadius;
+		m_fTop = m_fCenterY - m_fRadius;
+		m_fRight = m_fCenterX + m_fRadius;
+		m_fBottom = m_fCenterY + m_fRadius;
 	}
 	
-	public boolean containsPoint(int x, int y)
+	public boolean containsPoint(float x, float y)
 	{
-		Vector2D v = new Vector2D(x-m_iCenterX, y-m_iCenterY);
+		Vector2D v = new Vector2D(x- m_fCenterX, y- m_fCenterY);
 		
-		if (v.length() < m_iRadius)
+		if (v.length() < m_fRadius)
 			return true;
 		
 		return false;
@@ -42,12 +45,17 @@ public class CCircle implements CollisionArea
 		return containsPoint(position.getRoundedX(), position.getRoundedY());
 	}
 
-	public int getWidth()
+    @Override
+    public void render(Canvas canvas, Paint paint) {
+        canvas.drawCircle(m_fCenterX, m_fCenterY, m_fRadius, paint);
+    }
+
+    public float getWidth()
 	{
-		return m_iRadius*2;
+		return m_fRadius *2;
 	}
 
-	public int getHeight()
+	public float getHeight()
 	{
 		return getWidth();
 	}
@@ -67,84 +75,84 @@ public class CCircle implements CollisionArea
 			m_fRotation = rotation;
 	}
 
-	public void offsetTo(int x, int y)
+	public void offsetTo(float x, float y)
 	{
-		m_iCenterX = x + m_iRadius;
-		m_iCenterY = y + m_iRadius;
+		m_fCenterX = x + m_fRadius;
+		m_fCenterY = y + m_fRadius;
 		updateSides();
 	}
 	
-	public void offsetBy(int x, int y)
+	public void offsetBy(float x, float y)
 	{
-		m_iLeft += x;
-		m_iRight += x;
-		m_iCenterX += x;
-		m_iTop += y;
-		m_iBottom += y;
-		m_iCenterY += y;
+		m_fLeft += x;
+		m_fRight += x;
+		m_fCenterX += x;
+		m_fTop += y;
+		m_fBottom += y;
+		m_fCenterY += y;
 	}
 
-	public void offsetSoCenterIs(int x, int y)
+	public void offsetSoCenterIs(float x, float y)
 	{
-		m_iCenterX = x;
-		m_iCenterY = y;
+		m_fCenterX = x;
+		m_fCenterY = y;
 		updateSides();
 	}
 
-	public int getCenterX()
+	public float getCenterX()
 	{
-		return m_iCenterX;
+		return m_fCenterX;
 	}
 
-	public int getCenterY()
+	public float getCenterY()
 	{
-		return m_iCenterY;
+		return m_fCenterY;
 	}
 
-	public int getLeft()
+	public float getLeft()
 	{
-		return m_iLeft;
+		return m_fLeft;
 	}
 
-	public int getTop()
+	public float getTop()
 	{
-		return m_iTop;
+		return m_fTop;
 	}
 
-	public int getRight()
+	public float getRight()
 	{
-		return m_iRight;
+		return m_fRight;
 	}
 
-	public int getBottom()
+	public float getBottom()
 	{
-		return m_iBottom;
+		return m_fBottom;
 	}
 
-	public int getRadius()
+	public float getRadius()
 	{
-		return m_iRadius;
+		return m_fRadius;
 	}
 
 	public boolean intersects(CRect rect)
 	{
 		// Find the closest point to the circle within the rectangle
-		float closestX = JMath.Clamp(m_iCenterX, rect.getLeft(), rect.getRight());
-		float closestY = JMath.Clamp(m_iCenterY, rect.getTop(), rect.getBottom());
+		float closestX = JMath.Clamp(m_fCenterX, rect.getLeft(), rect.getRight());
+		float closestY = JMath.Clamp(m_fCenterY, rect.getTop(), rect.getBottom());
 
 		// Calculate the distance between the circle's center and this closest point
-		float distanceX = m_iCenterX - closestX;
-		float distanceY = m_iCenterY - closestY;
+		float distanceX = m_fCenterX - closestX;
+		float distanceY = m_fCenterY - closestY;
 
 		// If the distance is less than the circle's radius, an intersection occurs
 		float distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
-		return (distanceSquared < (m_iRadius * m_iRadius));
+		return (distanceSquared < (m_fRadius * m_fRadius));
 	}
 
 	public boolean intersects(CCircle circle)
 	{
-		Vector2D distance = new Vector2D(m_iCenterX - circle.m_iCenterX, m_iCenterY - circle.m_iCenterY);
-		if (distance.length() <= m_iRadius + circle.m_iRadius)
+		Vector2D distance = new Vector2D(m_fCenterX - circle.m_fCenterX, m_fCenterY - circle.m_fCenterY);
+		if (distance.length() <= m_fRadius + circle.m_fRadius)
 		{
 			return true;
 		}

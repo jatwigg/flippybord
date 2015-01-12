@@ -4,6 +4,7 @@ import com.xazux._2dlib.components.GameTime;
 import com.xazux._2dlib.sprites.components.Texture;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 public class Animation extends Texture {
 
@@ -179,12 +180,13 @@ public class Animation extends Texture {
 			break;
 		}
 		recalculateBitmap();
-	}
+        //Log.d(getClass().getSimpleName(), "current animation frame:" + m_iCurrentFrameIndex);
+    }
 	
 	protected void recalculateBitmap()
 	{
 		m_rInnerRect.offsetTo(m_rInnerRect.getWidth() * m_iCurrentFrameIndex, 0);
-		m_bitmap = Bitmap.createBitmap(m_bitmapEntire, m_rInnerRect.getLeft(), m_rInnerRect.getTop(), m_rInnerRect.getWidth(), m_rInnerRect.getHeight());
+		m_bitmap = Bitmap.createBitmap(m_bitmapEntire, (int)m_rInnerRect.getLeft(), (int)m_rInnerRect.getTop(), (int)m_rInnerRect.getWidth(), (int)m_rInnerRect.getHeight());
 	}
 	
 	public boolean HasFinishedCompleteCycle()

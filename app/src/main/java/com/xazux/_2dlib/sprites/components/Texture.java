@@ -10,8 +10,9 @@ public class Texture
 	protected Bitmap m_bitmap;
 	protected Paint m_paint;
 	protected Matrix m_renderMatrix;
-	
-	public Texture(Bitmap bitmap, Paint paint)
+    private boolean _stretch = true;
+
+    public Texture(Bitmap bitmap, Paint paint)
 	{
 		m_bitmap = bitmap;
 		m_paint = paint;
@@ -45,11 +46,20 @@ public class Texture
 		float originY = collisionArea.getHeight() * collisionArea.getOrigin().getY();
 		
 		m_renderMatrix.reset();
-		
-		//cw/bw=scalar so that scaler*bw = cw
-		m_renderMatrix.postScale((float)collisionArea.getWidth() / (float)m_bitmap.getWidth(),
-				(float)collisionArea.getHeight() / (float)m_bitmap.getHeight());
-		
+
+        if (_stretch) {
+            //cw/bw=scalar so that scaler*bw = cw
+            m_renderMatrix.postScale((float) collisionArea.getWidth() / (float) m_bitmap.getWidth(),
+                    (float) collisionArea.getHeight() / (float) m_bitmap.getHeight());
+        }
+        else {
+            float x = collisionArea.getWidth() / (float) m_bitmap.getWidth();
+            float y = collisionArea.getHeight() / (float) m_bitmap.getHeight();
+            if (y > x)
+                x = y;
+            m_renderMatrix.postScale(x, x);
+        }
+
 		// translate so origin is at 0,0
 		m_renderMatrix.postTranslate(-originX, -originY);
 		// rotate around origin
@@ -105,4 +115,14 @@ public class Texture
 		
 		return (int)((ratio * ifHeightIs) + 0.5f);	
 	}
+
+    public void setStretch(boolean s)
+    {
+        _stretch = s;
+    }
+
+    public boolean getStrecth()
+    {
+        return _stretch;
+    }
 }

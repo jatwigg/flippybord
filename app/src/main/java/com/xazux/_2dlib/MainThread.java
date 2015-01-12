@@ -11,7 +11,7 @@ public class MainThread extends Thread
 {
 	private static final String TAG = MainThread.class.getSimpleName();
 
-    private final boolean DEBUG = false;
+    private final boolean DEBUG = true;
     private Paint _debugInfo;
     private int _debugInfoBack;
 
@@ -62,10 +62,15 @@ public class MainThread extends Thread
 		long timeDiff;		// the time it took for the cycle to execute
 		int sleepTime;		// ms to sleep (<0 if we're behind)
 		int framesSkipped;	// number of frames being skipped
-        int frame = 0;      //frame count
-		
+
+        int framePS = 0;      //frame count
+        int skippedPS = 0;
+        int lastFPS = 0;
+		float elapsedPS = 0.0f;
+
 		while (running) 
-		{	
+		{
+            beginTime = System.currentTimeMillis();
 			canvas = null;
 			// try locking the canvas for exclusive pixel editing
 			// in the surface
@@ -89,7 +94,7 @@ public class MainThread extends Thread
                     continue;
                 }
 				synchronized (this._gameActivity) {
-					beginTime = System.currentTimeMillis();
+					//beginTime = System.currentTimeMillis();
 					framesSkipped = 0;	// resetting the frames skipped
 					// update game state 
 					this._gameActivity.onUpdate(m_gameTime);
@@ -100,8 +105,15 @@ public class MainThread extends Thread
 					this._gameActivity.onDraw(canvas);
 
                     if (DEBUG) {
+                        framePS++;
+                        elapsedPS += m_gameTime.getElapsedSeconds();
+                        if (elapsedPS > 1.0f) {
+                            lastFPS = framePS;
+                            elapsedPS -= 1.0f;
+                            skippedPS = framePS = 0;
+                        }
                         canvas.drawColor(_debugInfoBack);
-                        canvas.drawText("DEBUG frame:" + frame + " skipped:" + framesSkipped, 10,60, _debugInfo);
+                        canvas.drawText("DEBUG FPS:" + lastFPS + ".", 10,60, _debugInfo);
                     }
 
 					// calculate how long did the cycle take
@@ -119,7 +131,6 @@ public class MainThread extends Thread
 							Thread.sleep(sleepTime);	
 						} catch (InterruptedException e) {}
 					}
-                    frame++;
 					
 					while (sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS && running) 
 					{
