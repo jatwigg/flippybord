@@ -35,13 +35,14 @@ public class Game extends _2DGameActivity implements Touchable {
         _background.getTexture().setStretch(false); //so background isn 't squashed
         //bord
         float hs = screenSize.getWidth() * 0.075f;
-        CRect crect = new CRect(screenSize.getCenterX() - hs, screenSize.getCenterY() - hs, screenSize.getCenterX() + hs, screenSize.getCenterY() + hs);
+        CRect crect = CRect.CreateUsingWidthAndHeight(screenSize.getWidth() * 0.3f, screenSize.getCenterY() - hs, hs+hs, hs+hs);
+
         Animation anim = new Animation(BitmapFactory.decodeResource(getResources(), R.drawable.bordclear), 5, Animation.AnimationType.FORWARD_BACKWARD_LOOP, 0.1f);
         _bord = new Bord(anim, crect, screenSize.getHeight());
         debugPaint = new Paint();
         debugPaint.setColor(Color.GREEN);
         //pipe generator
-        _pipes = new PipeGenerator();
+        _pipes = new PipeGenerator(getResources(), screenSize);
 
         //screen
         getTouchHandler().RegisterTouchable(this);
@@ -49,12 +50,15 @@ public class Game extends _2DGameActivity implements Touchable {
 
     @Override
     public void onUpdate(GameTime gameTime) {
+        if (_started)
+            _pipes.update(gameTime);
         _bord.update(gameTime);
     }
 
     @Override
     public void onDraw(Canvas canvas) {
         _background.render(canvas);
+        _pipes.render(canvas);
         _bord.getCollisionArea().render(canvas, debugPaint);
         _bord.render(canvas);
     }

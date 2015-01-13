@@ -16,7 +16,7 @@ public class MainThread extends Thread
     private int _debugInfoBack;
 
     // desired fps
-	private int MAX_FPS = 32;
+	private int MAX_FPS = 60; //TODO: something is wrong with this: reports wrong fps in debug AND bord jumps higher when this value is higher...
 	// maximum number of frames to be skipped
 	private int MAX_FRAME_SKIPS = 5;
 	// the frame period
@@ -101,7 +101,7 @@ public class MainThread extends Thread
 					m_gameTime.Clear();
 					// render state to the screen
 					// draws the canvas on the panel
-                    canvas.drawColor(Color.BLACK);
+                    canvas.drawColor(Color.BLACK); //TODO: replace with cornflour blue
 					this._gameActivity.onDraw(canvas);
 
                     if (DEBUG) {
