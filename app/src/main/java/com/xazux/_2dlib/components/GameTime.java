@@ -3,38 +3,57 @@ package com.xazux._2dlib.components;
 import com.xazux._2dlib.MainThread;
 
 import android.os.SystemClock;
+import android.util.Log;
 
 public class GameTime 
 {
-	
-	protected long m_lOffset;
+	protected long _lastTime;
+    protected long _currentDeltaMills;
+    protected float _currentDeltaSeconds;
+	//protected long m_lOffset;
 	
 	public GameTime() 
 	{
-		m_lOffset= SystemClock.elapsedRealtime();
+		_lastTime = SystemClock.elapsedRealtime();
+        _currentDeltaMills = 0;
+        _currentDeltaSeconds = 0;
 	}
 
 	public float getElapsedSeconds()
 	{
-		return (float)((SystemClock.elapsedRealtime() - m_lOffset) / 1000.0);
+		//return (float)((SystemClock.elapsedRealtime() - m_lOffset) / 1000.0);
+        return _currentDeltaSeconds;
 	}
 	
-	public float getElapsedMills()
+	public long getElapsedMills()
 	{
-		return (float)(SystemClock.elapsedRealtime() - m_lOffset);
+		//return (float)(SystemClock.elapsedRealtime() - m_lOffset);
+        return _currentDeltaMills;
 	}
 	
-	public static long getTimeSinceSystemBoot()
+	/*public static long getTimeSinceSystemBoot()
 	{
 		return SystemClock.elapsedRealtime();
-	}
+	}*/
 
 	/*
 	 * ONLY CALL THIS FROM MAINTHREAD.JAVA
 	 * */
 	public void Clear()
 	{
-		m_lOffset = SystemClock.elapsedRealtime();
+        long time = SystemClock.elapsedRealtime();
+        Log.d(getClass().getSimpleName(), "Clear() [" + time + "][" + _lastTime + "]");
+        _currentDeltaMills = time - _lastTime;
+        _currentDeltaSeconds = _currentDeltaMills / 1000.0f;
+        _lastTime = time;
 	}
 
+    public long getLastRecordedMills() {
+        return _lastTime;
+    }
+
+    public long whatIsTimePlz()
+    {
+        return SystemClock.elapsedRealtime();
+    }
 }

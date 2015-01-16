@@ -41,7 +41,7 @@ public class PipeGenerator {
         _random = new Random();
 
         debugPaint = new Paint();
-        debugPaint.setColor(Color.BLACK);
+        debugPaint.setColor(Color.GREEN);
         debugPaint.setAntiAlias(true);
     }
 

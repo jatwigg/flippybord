@@ -5,6 +5,7 @@ import com.xazux._2dlib.components.GameTime;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.SystemClock;
 import android.util.Log;
 
 public class MainThread extends Thread 
@@ -13,14 +14,13 @@ public class MainThread extends Thread
 
     private final boolean DEBUG = true;
     private Paint _debugInfo;
-    private int _debugInfoBack;
 
     // desired fps
-	private int MAX_FPS = 60; //TODO: something is wrong with this: reports wrong fps in debug AND bord jumps higher when this value is higher...
+	private int MAX_FPS = 32;
 	// maximum number of frames to be skipped
 	private int MAX_FRAME_SKIPS = 5;
 	// the frame period
-	private int FRAME_PERIOD = 1000 / MAX_FPS;
+	private long FRAME_PERIOD_MILLS = 1000 / MAX_FPS;
 
 	private GameTime m_gameTime;
 	
@@ -30,8 +30,9 @@ public class MainThread extends Thread
 	// flag to hold game state 
 	volatile boolean running; //TODO: I made this volatile, was that the right choice?
 	private boolean hasFinished = false;
-	
-	public void setRunning(boolean run) 
+    private final int CORNFLOURBLUE = Color.rgb(100, 149, 237);
+
+    public void setRunning(boolean run)
 	{
 		this.running = run;
 	}
@@ -44,7 +45,7 @@ public class MainThread extends Thread
             _debugInfo = new Paint();
             _debugInfo.setColor(Color.MAGENTA);
             _debugInfo.setTextSize(50);
-            _debugInfoBack = Color.argb(35, 0, 255, 255);
+            _debugInfo.setAntiAlias(true);
         }
 	}
 
@@ -58,20 +59,20 @@ public class MainThread extends Thread
 		Canvas canvas;
 		Log.d(TAG, "Starting game loop");
 
-		long beginTime;		// the time when the cycle begun
 		long timeDiff;		// the time it took for the cycle to execute
-		int sleepTime;		// ms to sleep (<0 if we're behind)
+		long sleepTime;		// ms to sleep (<0 if we're behind)
 		int framesSkipped;	// number of frames being skipped
 
         int framePS = 0;      //frame count
         int skippedPS = 0;
         int lastFPS = 0;
-		float elapsedPS = 0.0f;
+		long elapsedPS = 0;
+        long debugCount = 0;
 
 		while (running) 
 		{
-            beginTime = System.currentTimeMillis();
 			canvas = null;
+            this._gameActivity.onUpdate(m_gameTime);
 			// try locking the canvas for exclusive pixel editing
 			// in the surface
 			try {
@@ -94,32 +95,41 @@ public class MainThread extends Thread
                     continue;
                 }
 				synchronized (this._gameActivity) {
-					//beginTime = System.currentTimeMillis();
+
+                    m_gameTime.Clear();
+
 					framesSkipped = 0;	// resetting the frames skipped
 					// update game state 
+/*
 					this._gameActivity.onUpdate(m_gameTime);
 					m_gameTime.Clear();
+ */
 					// render state to the screen
 					// draws the canvas on the panel
-                    canvas.drawColor(Color.BLACK); //TODO: replace with cornflour blue
+                    canvas.drawColor(CORNFLOURBLUE); //TODO: replace with cornflour blue
 					this._gameActivity.onDraw(canvas);
 
                     if (DEBUG) {
                         framePS++;
-                        elapsedPS += m_gameTime.getElapsedSeconds();
-                        if (elapsedPS > 1.0f) {
+                        elapsedPS += m_gameTime.getElapsedMills();
+                        if (elapsedPS > 1000) {
                             lastFPS = framePS;
-                            elapsedPS -= 1.0f;
+                            elapsedPS -= 1000;
                             skippedPS = framePS = 0;
+                            debugCount++;
                         }
-                        canvas.drawColor(_debugInfoBack);
-                        canvas.drawText("DEBUG FPS:" + lastFPS + ".", 10,60, _debugInfo);
+                        canvas.drawText("DEBUG(" + debugCount + ") FPS:" + lastFPS + ". SKIPPED:" + skippedPS, 10,60, _debugInfo);
                     }
 
+                    // unlock canvas to not create a starvation issue
+                    _gameActivity.getHolder().unlockCanvasAndPost(canvas);
+                    canvas = null; //so we don't end up doing it in finally
+
+
 					// calculate how long did the cycle take
-					timeDiff = System.currentTimeMillis() - beginTime;
+					timeDiff = m_gameTime.whatIsTimePlz() - m_gameTime.getLastRecordedMills();
 					// calculate sleep time
-					sleepTime = (int)(FRAME_PERIOD - timeDiff);
+					sleepTime = FRAME_PERIOD_MILLS - timeDiff;
 					
 					if (sleepTime > 0) 
 					{
@@ -128,17 +138,22 @@ public class MainThread extends Thread
 						{
 							// send the thread to sleep for a short period
 							// very useful for battery saving
-							Thread.sleep(sleepTime);	
+                            Log.d("SLEEP", sleepTime + ".");
+							Thread.sleep(sleepTime);
 						} catch (InterruptedException e) {}
 					}
 					
-					while (sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS && running) 
-					{
-						// we need to catch up
-						this._gameActivity.onUpdate(m_gameTime); // update without rendering
-						m_gameTime.Clear();
-						sleepTime += FRAME_PERIOD;	// add frame period to check if in next frame
+					while (sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS && running) {
+                        Log.d(getClass().getSimpleName(), "sleepTime=" + sleepTime + ". framePeriod=" + FRAME_PERIOD_MILLS + ". timeDiff=" + timeDiff);
+                        // we need to catch up
+                        m_gameTime.Clear();
+                        this._gameActivity.onUpdate(m_gameTime); // update without rendering
+                        if (DEBUG) {
+                            elapsedPS += m_gameTime.getElapsedMills();
+                        }
+                        sleepTime += FRAME_PERIOD_MILLS;	// add frame period to check if in next frame
 						framesSkipped++;
+                        skippedPS++;
 					}
 				}
 			} finally {
@@ -160,6 +175,6 @@ public class MainThread extends Thread
 
     public void setFPS(int fps) {
         MAX_FPS = fps;
-        FRAME_PERIOD = 1000 / MAX_FPS;
+        FRAME_PERIOD_MILLS = 1000 / MAX_FPS;
     }
 }
