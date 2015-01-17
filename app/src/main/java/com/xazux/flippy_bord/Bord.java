@@ -12,11 +12,12 @@ import com.xazux._2dlib.sprites.components.CollisionArea;
  * Created by josh on 09/01/15.
  */
 public class Bord extends Sprite {
-    private float _rotateSpeed, _yFlapSpeedSeconds, _ySpeed = 0.0f, _rotation = 0.0f;
+    private float _yFlapSpeedSeconds, _ySpeed = 0.0f, _rotation = 0.0f;
     private Animation _tx;
     private boolean _started = false;
     private float _screenHeight;
     private final float GRAVITY = 600.0f; //todo perhaps make this based on height?
+    private final float ROTATION_SPEED = 100.0f;
 
     public Bord(Animation texture, CollisionArea collisionArea, float screenHeight) {
         super(texture, collisionArea);
@@ -24,7 +25,6 @@ public class Bord extends Sprite {
         _tx.setStretch(true);
         _tx.Play();
         _yFlapSpeedSeconds = screenHeight * -0.5f;
-        _rotateSpeed = screenHeight * 0.1f;
         _screenHeight = screenHeight;
     }
 
@@ -49,8 +49,8 @@ public class Bord extends Sprite {
                 getCollisionArea().offsetBy(0, distanceTraveled);
             }
 
-            _rotation += _rotateSpeed * gameTime.getElapsedSeconds();
-            if (_rotation > 0 && _rotation < 90)
+            _rotation += ROTATION_SPEED * gameTime.getElapsedSeconds();
+            if (_rotation > -45 && _rotation < 90)
                 getCollisionArea().setRotationDegrees(_rotation);
         }
 
@@ -59,7 +59,9 @@ public class Bord extends Sprite {
 
     public void flap() {
         _ySpeed = _yFlapSpeedSeconds;
-        _rotation = 0.0f;
+        _rotation = -45.0f;
+        _tx.Stop();
+        _tx.Play();
     }
 
     public void gamebegin() {

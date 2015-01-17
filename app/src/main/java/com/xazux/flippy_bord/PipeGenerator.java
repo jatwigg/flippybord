@@ -19,7 +19,7 @@ import java.util.Random;
  */
 public class PipeGenerator {
     private Texture pipeTx;
-    private ArrayList<CollisionArea> _pipes;
+    private ArrayList<CRect> _pipes;
     private CRect _screenSize;
     private float _distanceBetweenPipes;
     private float _flightSpeed;
@@ -32,11 +32,11 @@ public class PipeGenerator {
     public PipeGenerator(Resources resources, CRect screenSize) {
         pipeTx = new Texture(BitmapFactory.decodeResource(resources, R.drawable.background));
         _screenSize = screenSize;
-        _pipes = new ArrayList<CollisionArea>();
+        _pipes = new ArrayList<CRect>();
         _distanceBetweenPipes = _screenSize.getWidth() * 0.5f;
         _flightSpeed = _screenSize.getWidth() * -0.4f;
         _pipeWidth = _screenSize.getWidth() * 0.2f;
-        _pipeSpace = _screenSize.getHeight() * 0.3f;
+        _pipeSpace = _screenSize.getHeight() * 0.4f;
         _pipeStart = new CRect(_screenSize.getRight(), _screenSize.getTop(), _screenSize.getRight() + _pipeWidth, _screenSize.getBottom());
         _random = new Random();
 
@@ -63,7 +63,7 @@ public class PipeGenerator {
         }
         if (_pipes.size() == 0 || (_screenSize.getRight() -  _pipes.get(_pipes.size() - 1).getRight()) > _distanceBetweenPipes) {
 
-            float b1 = 100 + _random.nextInt((int)(_screenSize.getHeight() * 0.68f));
+            float b1 = 100 + _random.nextInt((int)(_screenSize.getHeight() * 0.5f));
             float t2 = b1 + _pipeSpace;
 
             CRect p1 = new CRect(_pipeStart.getLeft(), _pipeStart.getTop(), _pipeStart.getRight(), b1);
@@ -71,5 +71,13 @@ public class PipeGenerator {
             _pipes.add(p1);
             _pipes.add(p2);
         }
+    }
+
+    public boolean intersects(CollisionArea carea)
+    {
+        for (CRect pipe : _pipes)
+            if (carea.intersects(pipe))
+                return true;
+        return false;
     }
 }

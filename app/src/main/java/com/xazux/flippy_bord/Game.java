@@ -25,6 +25,7 @@ public class Game extends _2DGameActivity implements Touchable {
     private Paint debugPaint;
     private PipeGenerator _pipes;
     private boolean _started = false;
+    private boolean _gameover = false;
 
     @Override
     public void onInit() {
@@ -37,7 +38,7 @@ public class Game extends _2DGameActivity implements Touchable {
         float hs = screenSize.getWidth() * 0.075f;
         CRect crect = CRect.CreateUsingWidthAndHeight(screenSize.getWidth() * 0.3f, screenSize.getCenterY() - hs, hs+hs, hs+hs);
 
-        Animation anim = new Animation(BitmapFactory.decodeResource(getResources(), R.drawable.bordclear), 5, Animation.AnimationType.FORWARD_BACKWARD_LOOP, 0.1f);
+        Animation anim = new Animation(BitmapFactory.decodeResource(getResources(), R.drawable.bordclear), 5, Animation.AnimationType.FORWARD_BACKWARD_ONCE, 0.1f);
         _bord = new Bord(anim, crect, screenSize.getHeight());
         debugPaint = new Paint();
         debugPaint.setColor(Color.GREEN);
@@ -50,8 +51,10 @@ public class Game extends _2DGameActivity implements Touchable {
 
     @Override
     public void onUpdate(GameTime gameTime) {
-        if (_started)
+        if (_started && !_gameover) {
             _pipes.update(gameTime);
+            _gameover = _pipes.intersects(_bord.getCollisionArea());
+        }
         _bord.update(gameTime);
     }
 
