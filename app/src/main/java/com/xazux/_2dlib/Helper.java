@@ -1,9 +1,15 @@
 package com.xazux._2dlib;
 
 import android.app.Activity;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -29,5 +35,40 @@ public class Helper {
             Measuredheight = d.getHeight();
         }
         return new CRect(0, 0, Measuredwidth, Measuredheight);
+    }
+
+    private static RectF bounds = new RectF();
+    public static void RenderTextCenterCRect(Canvas canvas, Paint paint, String text, CRect areaRect) {
+
+        bounds = new RectF(areaRect.getLeft(), areaRect.getTop(), areaRect.getRight(), areaRect.getBottom());
+        // measure text width
+
+        bounds.right = paint.measureText(text, 0, text.length());
+
+        // measure text height
+        bounds.bottom = paint.descent() - paint.ascent();
+
+        bounds.left += (areaRect.getWidth() - bounds.right) / 2.0f;
+        bounds.top += (areaRect.getHeight() - bounds.bottom) / 2.0f;
+
+        canvas.drawText(text, bounds.left, bounds.top - paint.ascent(), paint);
+    }
+
+    public static void RenderTextCenterCRectShadow(Canvas canvas, Paint paint, Paint paintFore, String text, CRect areaRect) {
+
+        bounds = new RectF(areaRect.getLeft(), areaRect.getTop(), areaRect.getRight(), areaRect.getBottom());
+        // measure text width
+
+        bounds.right = paint.measureText(text, 0, text.length());
+
+        // measure text height
+        bounds.bottom = paint.descent() - paint.ascent();
+
+        bounds.left += (areaRect.getWidth() - bounds.right) / 2.0f;
+        bounds.top += (areaRect.getHeight() - bounds.bottom) / 2.0f;
+
+        for (int i = -5; i < 5; ++i)
+            canvas.drawText(text, bounds.left + i, (bounds.top - paint.ascent()) + i, paint);
+        canvas.drawText(text, bounds.left + 5, (bounds.top - paint.ascent()) + 5, paintFore);
     }
 }

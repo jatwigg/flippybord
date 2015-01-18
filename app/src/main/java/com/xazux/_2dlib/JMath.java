@@ -58,4 +58,8 @@ public final class JMath
 				return -((angleToMove + 360.0f) - desiredAngle);
 		}
 	}
+
+    public static int Round(float f) {
+        return (int)(f + 0.5f);
+    }
 }

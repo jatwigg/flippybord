@@ -194,4 +194,9 @@ public class CRect implements CollisionArea
 	{
 		return new CRect(cArea.getLeft(), cArea.getTop(), cArea.getRight(), cArea.getBottom());
 	}
+
+    @Override
+    public String toString() {
+        return "CRect l:" + getLeft() + ",t:" + getTop() + ",r:" + getRight() + ",b:" + getBottom() + ".";
+    }
 }

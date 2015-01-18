@@ -23,8 +23,13 @@ public class Texture
 	{
 		this(bitmap,new Paint());
 	}
-	
-	public void update(GameTime gameTime)
+
+    public Texture(Bitmap bitmap, boolean stretch) {
+        this(bitmap);
+        setStretch(stretch);
+    }
+
+    public void update(GameTime gameTime)
 	{
 		// we don't update but derived classes do
 	}
