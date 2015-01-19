@@ -11,6 +11,7 @@ import com.xazux._2dlib.sprites.components.Animation;
 import com.xazux._2dlib.sprites.components.CCircle;
 import com.xazux._2dlib.sprites.components.CRect;
 import com.xazux._2dlib.sprites.components.CollisionArea;
+import com.xazux._2dlib.touch.TouchState;
 import com.xazux._2dlib.touch.Touchable;
 
 /**
@@ -81,12 +82,12 @@ public class Game extends _2DGameActivity implements Touchable {
     }
 
     @Override
-    public void OnTouchMove(MotionEvent event, float x, float y) {
+    public void OnTouchMove(TouchState event) {
 
     }
 
     @Override
-    public void OnTouchStart(MotionEvent event, float x, float y) {
+    public void OnTouchStart(TouchState event) {
         if (!_started) {
             _started = true;
             _bord.gamebegin();
@@ -98,12 +99,12 @@ public class Game extends _2DGameActivity implements Touchable {
     }
 
     @Override
-    public void OnTouchOver(MotionEvent event, float x, float y) {
+    public void OnTouchOver(TouchState event) {
 
     }
 
     @Override
-    public void OnTouchCancel(MotionEvent event) {
+    public void OnTouchCancel() {
 
     }
 }

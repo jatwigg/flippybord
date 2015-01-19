@@ -18,13 +18,13 @@ import com.xazux._2dlib.components.GameTime;
 import com.xazux._2dlib.sprites.components.CRect;
 import com.xazux._2dlib.sprites.components.CollisionArea;
 import com.xazux._2dlib.sprites.components.Texture;
+import com.xazux._2dlib.touch.TouchState;
 import com.xazux._2dlib.touch.Touchable;
 
 /**
  * Created by josh on 06/01/15.
  */
 public class Splash extends _2DGameActivity {
-    private float _elapsedTime = 0;
     private Texture _background;
 
     private CRect _backgroundRect;
@@ -41,19 +41,19 @@ public class Splash extends _2DGameActivity {
         }
 
         @Override
-        public void OnTouchMove(MotionEvent event, float x, float y) {
-
+        public void OnTouchMove(TouchState event) {
+            _startTouched = _startRect.containsPoint(event.X, event.Y);
         }
 
         @Override
-        public void OnTouchStart(MotionEvent event, float x, float y) {
+        public void OnTouchStart(TouchState event) {
             _startTouched = true;
         }
 
         @Override
-        public void OnTouchOver(MotionEvent event, float x, float y) {
+        public void OnTouchOver(TouchState event) {
             _startTouched = false;
-            if (_startRect.containsPoint((int)x, (int)y)) { //TODO: change this when CRevtF is implemented
+            if (_startRect.containsPoint(event.X, event.Y)) { //are these co-ords correct
                 //Toast.makeText(Splash.this, "lets start", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(Splash.this, Game.class));
                 overridePendingTransition(R.anim.enter_right, R.anim.leave_right);
@@ -61,7 +61,7 @@ public class Splash extends _2DGameActivity {
         }
 
         @Override
-        public void OnTouchCancel(MotionEvent event) {
+        public void OnTouchCancel() {
             _startTouched = false;
         }
     };
@@ -107,7 +107,6 @@ public class Splash extends _2DGameActivity {
 
     @Override
     public void onUpdate(GameTime gameTime) {
-        _elapsedTime += gameTime.getElapsedSeconds();
     }
 
     @Override

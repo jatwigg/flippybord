@@ -1,60 +1,45 @@
 package com.xazux._2dlib.touch;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Vector;
 
 import android.view.MotionEvent;
 
 public class MainTouchHandle
 {
-	protected Vector<TouchControl> m_touchControl = new Vector<TouchControl>();
-	protected Object m_touchableLock = new Object();
+    protected Object m_touchableLock = new Object();
+    protected Vector<TouchControl> m_touchControl = new Vector<TouchControl>();
 
-	public boolean onTouchEvent(final MotionEvent event) 
+    ArrayList<TouchState> _eventQ_Started = new ArrayList<>();
+    ArrayList<TouchState> _eventQ_Moved = new ArrayList<>();
+    ArrayList<TouchState> _eventQ_Over = new ArrayList<>();
+    ArrayList<TouchState> _eventQ_Cancelled = new ArrayList<>();
+
+	public boolean onTouchEvent(final MotionEvent event)
 	{
-		synchronized (m_touchableLock)
-		{
-			synchronized (event)
-			{
-				switch (event.getAction() & MotionEvent.ACTION_MASK) 
-				{
-				case MotionEvent.ACTION_POINTER_DOWN: 
-				case MotionEvent.ACTION_DOWN: 
-				{
-					for (int i=0; i< m_touchControl.size(); ++i)
-						m_touchControl.get(i).TouchStarted(event);
-					break;
-				}
-
-				case MotionEvent.ACTION_MOVE: 
-				{
-					for (int i=0; i< m_touchControl.size(); ++i)
-						m_touchControl.get(i).TouchMove(event);
-					break;
-				} 
-
-				case MotionEvent.ACTION_CANCEL: 
-				{
-					for (int i=0; i< m_touchControl.size(); ++i)
-						m_touchControl.get(i).TouchCancel(event);
-					break;
-				}
-
-				case MotionEvent.ACTION_UP: 
-				case MotionEvent.ACTION_POINTER_UP: 
-				{
-					// Extract the index of the pointer that left the touch sensor
-					final int pointerIndex = (event.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) 
-							>> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
-							final int pointerId = event.getPointerId(pointerIndex);
-							float x = event.getX(pointerIndex), y = event.getY(pointerIndex);
-							
-							for (int i=0; i< m_touchControl.size(); ++i)
-								m_touchControl.get(i).TouchOver(event, pointerId, x, y);
-							break;
-				}
-				}
-			}
-		}
+        synchronized (m_touchableLock) {
+            switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                case MotionEvent.ACTION_DOWN:
+                    _eventQ_Started.add(TouchState.actionDown(event));
+                    break;
+                case MotionEvent.ACTION_POINTER_DOWN:
+                    _eventQ_Started.add(TouchState.actionPointerDown(event));
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    _eventQ_Moved.addAll(TouchState.actionMove(event));
+                    break;
+                case MotionEvent.ACTION_UP:
+                    _eventQ_Over.add(TouchState.actionUp(event));
+                    break;
+                case MotionEvent.ACTION_POINTER_UP:
+                    _eventQ_Over.add(TouchState.actionPointerUp(event));
+                    break;
+                case MotionEvent.ACTION_CANCEL:
+                    _eventQ_Cancelled.add(TouchState.actionCancel(event));
+                    break;
+            }
+        }
 		return true;
 	}
 
@@ -90,4 +75,35 @@ public class MainTouchHandle
 			}
 		}
 	}
+
+    public void onUpdate() {
+        // this is called by main thread before it does a game update and game draw. the intention is to
+        //  make the touch updates synchronous to the game thread.
+        synchronized (m_touchableLock)
+        {
+            for (TouchState state : _eventQ_Started) {
+                for (TouchControl control : m_touchControl)
+                    control.TouchStarted(state);
+            }
+            _eventQ_Started.clear();
+
+            for (TouchState state : _eventQ_Moved) {
+                for (TouchControl control : m_touchControl)
+                    control.TouchMove(state);
+            }
+            _eventQ_Moved.clear();
+
+            for (TouchState state : _eventQ_Over) {
+                for (TouchControl control : m_touchControl)
+                    control.TouchOver(state);
+            }
+            _eventQ_Over.clear();
+
+            for (TouchState state : _eventQ_Cancelled) {
+                for (TouchControl control : m_touchControl)
+                    control.TouchCancel(state);
+            }
+            _eventQ_Cancelled.clear();
+        }
+    }
 }

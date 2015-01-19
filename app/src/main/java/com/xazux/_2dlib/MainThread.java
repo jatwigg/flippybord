@@ -72,6 +72,7 @@ public class MainThread extends Thread
 		while (running) 
 		{
 			canvas = null;
+            this._gameActivity.getTouchHandler().onUpdate();
             this._gameActivity.onUpdate(m_gameTime);
 			// try locking the canvas for exclusive pixel editing
 			// in the surface
