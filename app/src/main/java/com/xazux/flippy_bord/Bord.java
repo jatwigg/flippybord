@@ -1,69 +1,73 @@
 package com.xazux.flippy_bord;
 
+import android.graphics.Canvas;
+
 import com.xazux._2dlib.JMath;
+import com.xazux._2dlib._2DGameActivity;
 import com.xazux._2dlib.components.GameTime;
-import com.xazux._2dlib.sprites.Sprite;
 import com.xazux._2dlib.sprites.components.Animation;
 import com.xazux._2dlib.sprites.components.CCircle;
+import com.xazux._2dlib.sprites.components.CRect;
 import com.xazux._2dlib.sprites.components.CollisionArea;
 
 /**
  * Created by josh on 09/01/15.
  */
-public class Bord extends Sprite {
+public class Bord {
     private float _yFlapSpeedSeconds, _ySpeed = 0.0f, _rotation = 0.0f;
     private Animation _tx;
     private boolean _started = false;
     private float _screenHeight;
     private final float GRAVITY = 600.0f; //todo perhaps make this based on height?
     private final float ROTATION_SPEED = 100.0f;
-    private CCircle _collisionArea;
+    private CCircle _collisionArea, _drawArea;
 
-    public Bord(Animation texture, CCircle drawArea, float screenHeight) {
-        super(texture, drawArea);
-        _tx = texture;
+    public Bord(_2DGameActivity context) {
+        CRect screenSize = context.getScreenDimensions();
+        _drawArea = new CCircle(screenSize.getWidth() * 0.375f, screenSize.getCenterY(), screenSize.getWidth() * 0.075f);
+
+        _tx = new Animation(context.loadBitmap(R.drawable.bord), 10, Animation.AnimationType.FORWARD_LOOP, 0.05f);
+        _tx.getPaint().setAntiAlias(true);
         _tx.setStretch(false);
         _tx.Play();
-        _yFlapSpeedSeconds = screenHeight * -0.5f;
-        _screenHeight = screenHeight;
-        _collisionArea = new CCircle(drawArea.getCenterX(), drawArea.getCenterY(), drawArea.getRadius() * 0.7f);
+
+        _yFlapSpeedSeconds = screenSize.getHeight() * -0.5f;
+        _screenHeight = screenSize.getHeight();
+        _collisionArea = new CCircle(_drawArea.getCenterX(), _drawArea.getCenterY(), _drawArea.getRadius() * 0.7f);
     }
 
     public void update(GameTime gameTime) {
         if (_started) {
 
-            CollisionArea positionArea = super.getCollisionArea();
-
             _ySpeed = JMath.Clamp(_ySpeed + (GRAVITY * gameTime.getElapsedSeconds()), _yFlapSpeedSeconds, GRAVITY);
             _ySpeed += (GRAVITY * gameTime.getElapsedSeconds());
             float distanceTraveled = _ySpeed * gameTime.getElapsedSeconds();
 
-            float yPos = positionArea.getBottom() + distanceTraveled;
+            float yPos = _drawArea.getBottom() + distanceTraveled;
 
             if (yPos > _screenHeight) {
-                float f = _screenHeight - positionArea.getBottom();
-                positionArea.offsetBy(0, f);
+                float f = _screenHeight - _drawArea.getBottom();
+                _drawArea.offsetBy(0, f);
             }
-            else if (yPos < positionArea.getHeight()) {
-                float f = positionArea.getTop() * -1.0f;
-                positionArea.offsetBy(0, f);
+            else if (yPos < _drawArea.getHeight()) {
+                float f = _drawArea.getTop() * -1.0f;
+                _drawArea.offsetBy(0, f);
             }
             else {
-                positionArea.offsetBy(0, distanceTraveled);
+                _drawArea.offsetBy(0, distanceTraveled);
             }
 
             _rotation += ROTATION_SPEED * gameTime.getElapsedSeconds();
             if (_rotation > -45 && _rotation < 90)
-                positionArea.setRotationDegrees(_rotation);
+                _drawArea.setRotationDegrees(_rotation);
 
             // update collision area
-            _collisionArea.offsetSoCenterIs(positionArea.getCenterX(), positionArea.getCenterY());
+            _collisionArea.offsetSoCenterIs(_drawArea.getCenterX(), _drawArea.getCenterY());
         }
 
         _tx.update(gameTime);
     }
 
-    @Override
     public CollisionArea getCollisionArea() {
         return _collisionArea;
     }
@@ -80,5 +84,9 @@ public class Bord extends Sprite {
         _tx.Stop();
         _tx.ChangeType(Animation.AnimationType.FORWARD_ONCE);
         _tx.Play();
+    }
+
+    public void render(Canvas canvas) {
+        _tx.render(canvas, _drawArea);
     }
 }

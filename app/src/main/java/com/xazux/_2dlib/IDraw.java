@@ -1,9 +1,9 @@
 package com.xazux._2dlib;
 
-import com.xazux._2dlib.components.GameTime;
-
 import android.content.res.Resources;
 import android.graphics.Canvas;
+
+import com.xazux._2dlib.components.GameTime;
 
 public interface IDraw
 {

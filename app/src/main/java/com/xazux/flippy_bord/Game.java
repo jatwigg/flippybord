@@ -1,15 +1,9 @@
 package com.xazux.flippy_bord;
 
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.view.MotionEvent;
 
-import com.xazux._2dlib.Helper;
 import com.xazux._2dlib._2DGameActivity;
 import com.xazux._2dlib.components.GameTime;
-import com.xazux._2dlib.sprites.components.Animation;
-import com.xazux._2dlib.sprites.components.CCircle;
-import com.xazux._2dlib.sprites.components.CRect;
 import com.xazux._2dlib.sprites.components.CollisionArea;
 import com.xazux._2dlib.touch.TouchState;
 import com.xazux._2dlib.touch.Touchable;
@@ -18,7 +12,6 @@ import com.xazux._2dlib.touch.Touchable;
  * Created by josh on 08/01/15.
  */
 public class Game extends _2DGameActivity implements Touchable {
-    private CRect _screenSize;
     private CloudyBackground _background;
     private Bord _bord;
     private PipeGenerator _pipes;
@@ -28,21 +21,10 @@ public class Game extends _2DGameActivity implements Touchable {
 
     @Override
     public void onInit() {
-        // background
-        _screenSize = Helper.GetScreenDimensions(this);
-        _background = new CloudyBackground(getResources(), _screenSize);
-
-        // bord
-        Animation anim = new Animation(BitmapFactory.decodeResource(getResources(), R.drawable.bord), 10, Animation.AnimationType.FORWARD_LOOP, 0.1f);
-        CCircle cCircle = new CCircle(_screenSize.getWidth() * 0.375f, _screenSize.getCenterY(), _screenSize.getWidth() * 0.075f);
-        _bord = new Bord(anim, cCircle, _screenSize.getHeight());
-
-        // score board
-        _scoreBoard = new ScoreBoard(getResources(), _screenSize);
-
-        // pipe generator
-        _pipes = new PipeGenerator(getResources(), _screenSize, _bord.getCollisionArea().getRight(), _scoreBoard);
-
+        _background = new CloudyBackground(this);
+        _bord = new Bord(this);
+        _scoreBoard = new ScoreBoard(this);
+        _pipes = new PipeGenerator(this, _bord.getCollisionArea().getRight(), _scoreBoard);
         // we want to flap when touched
         getTouchHandler().RegisterTouchable(this);
     }
@@ -78,7 +60,7 @@ public class Game extends _2DGameActivity implements Touchable {
 
     @Override
     public CollisionArea getCollisionArea() {
-        return _screenSize;
+        return getScreenDimensions();
     }
 
     @Override

@@ -1,10 +1,8 @@
 package com.xazux._2dlib.sprites.components;
 
-import com.xazux._2dlib.components.GameTime;
-import com.xazux._2dlib.sprites.components.Texture;
-
 import android.graphics.Bitmap;
-import android.util.Log;
+
+import com.xazux._2dlib.components.GameTime;
 
 public class Animation extends Texture {
 

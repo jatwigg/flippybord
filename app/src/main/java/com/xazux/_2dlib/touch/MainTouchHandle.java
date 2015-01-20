@@ -1,10 +1,9 @@
 package com.xazux._2dlib.touch;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Vector;
-
 import android.view.MotionEvent;
+
+import java.util.ArrayList;
+import java.util.Vector;
 
 public class MainTouchHandle
 {

@@ -1,15 +1,19 @@
 package com.xazux._2dlib;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
 import com.xazux._2dlib.components.GameTime;
+import com.xazux._2dlib.sprites.components.CRect;
 import com.xazux._2dlib.touch.MainTouchHandle;
+
+import java.util.HashMap;
 
 public abstract class _2DGameActivity extends Activity
 {
@@ -17,6 +21,7 @@ public abstract class _2DGameActivity extends Activity
     private _2DSurfaceView _surfaceView;
     private boolean _bInitalized = false;
     private MainTouchHandle _mainTouchHandle = new MainTouchHandle();
+    private HashMap<Integer, Bitmap> _bitmapMap = new HashMap<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,6 +60,18 @@ public abstract class _2DGameActivity extends Activity
 
     public MainTouchHandle getTouchHandler() {
         return _mainTouchHandle;
+    }
+
+    public CRect getScreenDimensions() {
+        return Helper.GetScreenDimensions(this);
+    }
+
+    public Bitmap loadBitmap(int id) {
+        if (_bitmapMap.containsKey(id))
+            return _bitmapMap.get(id);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), id);
+        _bitmapMap.put(id, bitmap);
+        return bitmap;
     }
 
     void doInit()

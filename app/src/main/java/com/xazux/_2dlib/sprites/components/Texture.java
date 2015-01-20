@@ -1,8 +1,11 @@
 package com.xazux._2dlib.sprites.components;
 
-import com.xazux._2dlib.components.GameTime;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 
-import android.graphics.*;
+import com.xazux._2dlib.components.GameTime;
 
 public class Texture 
 {

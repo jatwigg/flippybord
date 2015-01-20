@@ -1,8 +1,8 @@
 package com.xazux._2dlib.components;
 
-import com.xazux._2dlib.JMath;
-
 import android.util.FloatMath;
+
+import com.xazux._2dlib.JMath;
 
 public class Vector2D
 {

@@ -1,12 +1,11 @@
 package com.xazux._2dlib;
 
-import com.xazux._2dlib.components.GameTime;
-
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.SystemClock;
 import android.util.Log;
+
+import com.xazux._2dlib.components.GameTime;
 
 public class MainThread extends Thread 
 {

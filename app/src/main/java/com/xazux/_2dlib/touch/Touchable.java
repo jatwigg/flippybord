@@ -1,7 +1,5 @@
 package com.xazux._2dlib.touch;
 
-import android.view.MotionEvent;
-
 import com.xazux._2dlib.sprites.components.CollisionArea;
 
 public interface Touchable

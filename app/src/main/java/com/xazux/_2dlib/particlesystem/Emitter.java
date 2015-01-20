@@ -1,6 +1,8 @@
 package com.xazux._2dlib.particlesystem;
 
-import java.util.ArrayList;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.util.FloatMath;
 
 import com.xazux._2dlib.JMath;
 import com.xazux._2dlib.components.GameTime;
@@ -10,9 +12,7 @@ import com.xazux._2dlib.sprites.components.CCircle;
 import com.xazux._2dlib.sprites.components.CollisionArea;
 import com.xazux._2dlib.sprites.components.Texture;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.util.FloatMath;
+import java.util.ArrayList;
 
 public class Emitter
 {

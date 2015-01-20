@@ -1,11 +1,11 @@
 package com.xazux._2dlib.sprites.components;
 
-import com.xazux._2dlib.JMath;
-import com.xazux._2dlib.components.Vector2D;
-
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+
+import com.xazux._2dlib.JMath;
+import com.xazux._2dlib.components.Vector2D;
 
 public class CRect implements CollisionArea 
 {

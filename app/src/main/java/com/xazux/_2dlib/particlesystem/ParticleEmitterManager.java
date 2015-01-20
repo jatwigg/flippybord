@@ -1,12 +1,12 @@
 package com.xazux._2dlib.particlesystem;
 
-import java.util.ArrayList;
-
 import android.graphics.Canvas;
 
 import com.xazux._2dlib.components.GameTime;
 import com.xazux._2dlib.components.TimeElapser;
 import com.xazux._2dlib.components.Vector2D;
+
+import java.util.ArrayList;
 
 public class ParticleEmitterManager
 {

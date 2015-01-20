@@ -1,7 +1,5 @@
 package com.xazux._2dlib.touch;
 
-import android.view.MotionEvent;
-
 public class TouchControl
 {
 	protected Touchable m_touchable;

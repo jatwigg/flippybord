@@ -2,8 +2,6 @@ package com.xazux._2dlib.touch;
 
 import android.view.MotionEvent;
 
-import com.xazux._2dlib.Triplet;
-
 import java.util.ArrayList;
 
 /**

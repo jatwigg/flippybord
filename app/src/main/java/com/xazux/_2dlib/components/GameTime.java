@@ -1,7 +1,5 @@
 package com.xazux._2dlib.components;
 
-import com.xazux._2dlib.MainThread;
-
 import android.os.SystemClock;
 import android.util.Log;
 

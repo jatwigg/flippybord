@@ -1,10 +1,9 @@
 package com.xazux.flippy_bord;
 
-import android.content.res.Resources;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
 import com.xazux._2dlib.JMath;
+import com.xazux._2dlib._2DGameActivity;
 import com.xazux._2dlib.components.GameTime;
 import com.xazux._2dlib.sprites.components.CRect;
 import com.xazux._2dlib.sprites.components.CollisionArea;
@@ -23,18 +22,20 @@ public class PipeGenerator {
     private final float X_PIPE_SPACE, PIPE_WIDTH, SCROLL_SPEED, Y_PIPE_SPACE, BORD_POSITION_X;
     private final CRect BODY_RECT, OUTLET_RECT, SCREENSIZE;
     private final Random RANDOM = new Random();
-
-    public PipeGenerator(Resources resources, CRect screenSize, float bordPositionX, ScoreBoard scoreBoard) {
+    //TODO: clean this shitty class up
+    public PipeGenerator(_2DGameActivity context, float bordPositionX, ScoreBoard scoreBoard) {
         BORD_POSITION_X = bordPositionX;
         SCOREBOARD = scoreBoard;
 
-        TX_BODY = new Texture(BitmapFactory.decodeResource(resources, R.drawable.pipe));
+        TX_BODY = new Texture(context.loadBitmap(R.drawable.pipe));
         TX_BODY.setStretch(true);
+        TX_BODY.getPaint().setAntiAlias(true);
 
-        TX_OUTLET = new Texture(BitmapFactory.decodeResource(resources, R.drawable.pipe_top));
+        TX_OUTLET = new Texture(context.loadBitmap(R.drawable.pipe_top));
         TX_OUTLET.setStretch(true);
+        TX_OUTLET.getPaint().setAntiAlias(true);
 
-        SCREENSIZE = screenSize;
+        SCREENSIZE = context.getScreenDimensions();
         X_PIPE_SPACE = SCREENSIZE.getWidth() * 0.5f;
         SCROLL_SPEED = SCREENSIZE.getWidth() * -0.4f;
         PIPE_WIDTH = SCREENSIZE.getWidth() * 0.2f;

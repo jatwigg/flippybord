@@ -1,18 +1,14 @@
 package com.xazux.flippy_bord;
 
-import android.content.res.Resources;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.util.Log;
 
 import com.xazux._2dlib.JMath;
-import com.xazux._2dlib.components.GameTime;
+import com.xazux._2dlib._2DGameActivity;
 import com.xazux._2dlib.sprites.components.CRect;
 import com.xazux._2dlib.sprites.components.Texture;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by josh on 17/01/15.
@@ -24,10 +20,10 @@ public class CloudyBackground {
     private final int _backColour = Color.rgb(81, 172, 230);
     private final ArrayList<Cloud> _clouds = new ArrayList<>();
 
-    public CloudyBackground(Resources resources, CRect screenSize) {
-        SCREENSIZE = screenSize;
-        TX_CLOUD = new Texture(BitmapFactory.decodeResource(resources, R.drawable.cloud));
-        DISTANCE_BETWEEN_CLOUDS = screenSize.getWidth() * 0.25f;
+    public CloudyBackground(_2DGameActivity context) {
+        SCREENSIZE = context.getScreenDimensions();
+        TX_CLOUD = new Texture(context.loadBitmap(R.drawable.cloud));
+        DISTANCE_BETWEEN_CLOUDS = SCREENSIZE.getWidth() * 0.25f;
     }
 
     public void update(float elapsedSeconds)
@@ -42,8 +38,7 @@ public class CloudyBackground {
                 lastCloud = _clouds.get(i);
             }
         }
-        if (_clouds.size() == 0 ||
-                (SCREENSIZE.getRight() - lastCloud._area.getRight() ) > DISTANCE_BETWEEN_CLOUDS)
+        if (_clouds.size() == 0 || (SCREENSIZE.getRight() - lastCloud._area.getRight() ) > DISTANCE_BETWEEN_CLOUDS)
         {
             _clouds.add(new Cloud());
         }
@@ -78,7 +73,6 @@ public class CloudyBackground {
                     w = SCREENSIZE.getWidth() * 0.25f;
                     _speed = SCREENSIZE.getWidth() * -0.125f;
                     break;
-
             }
             _area = CRect.CreateUsingWidthAndHeight(SCREENSIZE.getRight(), JMath.GetRandom().nextInt((int)(SCREENSIZE.getHeight() * 0.7f)), w, TX_CLOUD.getHeightIfWidthIs(JMath.Round(w)));
         }

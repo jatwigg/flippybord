@@ -1,13 +1,9 @@
 package com.xazux._2dlib.sprites;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
-import com.xazux._2dlib.sprites.components.CRect;
 import com.xazux._2dlib.sprites.components.CollisionArea;
 import com.xazux._2dlib.sprites.components.Texture;
-
-import org.w3c.dom.Text;
 
 /**
  * Created by josh on 09/01/15.
