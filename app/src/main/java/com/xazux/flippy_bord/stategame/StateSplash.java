@@ -1,6 +1,5 @@
 package com.xazux.flippy_bord.stategame;
 
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -9,14 +8,16 @@ import android.graphics.Paint;
 
 import com.xazux._2dlib._2DGameActivityWithStates;
 import com.xazux._2dlib.components.GameTime;
+import com.xazux._2dlib.components.Vector2D;
+import com.xazux._2dlib.particlesystem.Emitter;
+import com.xazux._2dlib.particlesystem.EmitterCone;
 import com.xazux._2dlib.sprites.Sprite;
 import com.xazux._2dlib.sprites.TouchableSprite;
+import com.xazux._2dlib.sprites.components.Animation;
 import com.xazux._2dlib.sprites.components.CRect;
 import com.xazux._2dlib.sprites.components.Texture;
 import com.xazux._2dlib.states.GameState;
-import com.xazux._2dlib.touch.MainTouchHandle;
 import com.xazux._2dlib.touch.TouchState;
-import com.xazux.flippy_bord.Game;
 import com.xazux.flippy_bord.R;
 
 /**

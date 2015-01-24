@@ -1,4 +1,4 @@
-package com.xazux.flippy_bord;
+package com.xazux.flippy_bord.activitygame;
 
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -15,6 +15,7 @@ import com.xazux._2dlib.sprites.TouchableSprite;
 import com.xazux._2dlib.sprites.components.CRect;
 import com.xazux._2dlib.sprites.components.Texture;
 import com.xazux._2dlib.touch.TouchState;
+import com.xazux.flippy_bord.R;
 
 /**
  * Created by josh on 06/01/15.

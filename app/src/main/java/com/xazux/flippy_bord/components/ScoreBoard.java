@@ -1,4 +1,4 @@
-package com.xazux.flippy_bord;
+package com.xazux.flippy_bord.components;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

@@ -1,4 +1,4 @@
-package com.xazux.flippy_bord;
+package com.xazux.flippy_bord.activitygame;
 
 import android.graphics.Canvas;
 
@@ -7,6 +7,11 @@ import com.xazux._2dlib.components.GameTime;
 import com.xazux._2dlib.sprites.components.CollisionArea;
 import com.xazux._2dlib.touch.TouchState;
 import com.xazux._2dlib.touch.Touchable;
+import com.xazux.flippy_bord.components.Bord;
+import com.xazux.flippy_bord.components.CloudyBackground;
+import com.xazux.flippy_bord.components.PipeGenerator;
+import com.xazux.flippy_bord.R;
+import com.xazux.flippy_bord.components.ScoreBoard;
 
 /**
  * Created by josh on 08/01/15.

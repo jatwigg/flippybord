@@ -1,14 +1,14 @@
-package com.xazux.flippy_bord;
+package com.xazux.flippy_bord.components;
 
 import android.graphics.Canvas;
 
 import com.xazux._2dlib.I2DGameContext;
 import com.xazux._2dlib.JMath;
-import com.xazux._2dlib._2DGameActivity;
 import com.xazux._2dlib.components.GameTime;
 import com.xazux._2dlib.sprites.components.CRect;
 import com.xazux._2dlib.sprites.components.CollisionArea;
 import com.xazux._2dlib.sprites.components.Texture;
+import com.xazux.flippy_bord.R;
 
 import java.util.ArrayList;
 import java.util.Random;

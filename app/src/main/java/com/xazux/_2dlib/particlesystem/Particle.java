@@ -19,7 +19,7 @@ public class Particle
 	
 	/**
 	 * Construct a particle
-	 * @param position location on screen
+	 * @param areaOnScreen location on screen
 	 * @param velocityPerSecond distance it will travel in 1 second
 	 */
 	public Particle(CollisionArea areaOnScreen, Vector2D velocityPerSecond, float lifeSpanInSeconds)

@@ -1,4 +1,4 @@
-package com.xazux.flippy_bord;
+package com.xazux.flippy_bord.components;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -8,6 +8,7 @@ import com.xazux._2dlib.JMath;
 import com.xazux._2dlib._2DGameActivity;
 import com.xazux._2dlib.sprites.components.CRect;
 import com.xazux._2dlib.sprites.components.Texture;
+import com.xazux.flippy_bord.R;
 
 import java.util.ArrayList;
 

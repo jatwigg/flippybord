@@ -1,4 +1,4 @@
-package com.xazux.flippy_bord;
+package com.xazux.flippy_bord.components;
 
 import android.graphics.Canvas;
 
@@ -10,6 +10,7 @@ import com.xazux._2dlib.sprites.components.Animation;
 import com.xazux._2dlib.sprites.components.CCircle;
 import com.xazux._2dlib.sprites.components.CRect;
 import com.xazux._2dlib.sprites.components.CollisionArea;
+import com.xazux.flippy_bord.R;
 
 /**
  * Created by josh on 09/01/15.

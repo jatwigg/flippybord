@@ -8,11 +8,10 @@ import com.xazux._2dlib.sprites.components.CollisionArea;
 import com.xazux._2dlib.states.GameState;
 import com.xazux._2dlib.touch.TouchState;
 import com.xazux._2dlib.touch.Touchable;
-import com.xazux.flippy_bord.Bord;
-import com.xazux.flippy_bord.CloudyBackground;
-import com.xazux.flippy_bord.PipeGenerator;
-import com.xazux.flippy_bord.R;
-import com.xazux.flippy_bord.ScoreBoard;
+import com.xazux.flippy_bord.components.Bord;
+import com.xazux.flippy_bord.components.CloudyBackground;
+import com.xazux.flippy_bord.components.PipeGenerator;
+import com.xazux.flippy_bord.components.ScoreBoard;
 
 /**
  * Created by josh on 23/01/15.

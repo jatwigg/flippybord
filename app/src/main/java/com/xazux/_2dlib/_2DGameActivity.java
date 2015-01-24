@@ -25,6 +25,7 @@ public abstract class _2DGameActivity extends Activity implements I2DGameContext
     private _2DSurfaceView _surfaceView;
     private boolean _bInitalized = false;
     private MainTouchHandle _mainTouchHandle = new MainTouchHandle();
+
     private HashMap<Integer, Bitmap> _bitmapMap = new HashMap<>();
 
     @Override
@@ -65,7 +66,6 @@ public abstract class _2DGameActivity extends Activity implements I2DGameContext
     public MainTouchHandle getTouchHandler() {
         return _mainTouchHandle;
     }
-
     public CRect getScreenDimensions() {
         return Helper.GetScreenDimensions(this);
     }

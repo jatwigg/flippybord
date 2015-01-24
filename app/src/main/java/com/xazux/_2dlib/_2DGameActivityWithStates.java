@@ -100,7 +100,7 @@ public abstract class _2DGameActivityWithStates extends Activity implements I2DG
     }
 
     private GameState invoke(Class<?> clazz) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        Constructor<?> ctor = clazz.getConstructor(_2DGameActivityWithStates.class); //this class is the constructor param
+        Constructor<?> ctor = clazz.getConstructor( _2DGameActivityWithStates.class); //this class is the constructor param
         return (GameState) ctor.newInstance(new Object[] { this });
     }
 
