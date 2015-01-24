@@ -2,6 +2,7 @@ package com.xazux.flippy_bord;
 
 import android.graphics.Canvas;
 
+import com.xazux._2dlib.I2DGameContext;
 import com.xazux._2dlib.JMath;
 import com.xazux._2dlib._2DGameActivity;
 import com.xazux._2dlib.components.GameTime;
@@ -22,7 +23,7 @@ public class Bord {
     private final float ROTATION_SPEED = 100.0f;
     private CCircle _collisionArea, _drawArea;
 
-    public Bord(_2DGameActivity context) {
+    public Bord(I2DGameContext context) {
         CRect screenSize = context.getScreenDimensions();
         _drawArea = new CCircle(screenSize.getWidth() * 0.375f, screenSize.getCenterY(), screenSize.getWidth() * 0.075f);
 

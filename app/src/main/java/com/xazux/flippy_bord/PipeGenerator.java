@@ -2,6 +2,7 @@ package com.xazux.flippy_bord;
 
 import android.graphics.Canvas;
 
+import com.xazux._2dlib.I2DGameContext;
 import com.xazux._2dlib.JMath;
 import com.xazux._2dlib._2DGameActivity;
 import com.xazux._2dlib.components.GameTime;
@@ -23,7 +24,7 @@ public class PipeGenerator {
     private final CRect BODY_RECT, OUTLET_RECT, SCREENSIZE;
     private final Random RANDOM = new Random();
     //TODO: clean this shitty class up
-    public PipeGenerator(_2DGameActivity context, float bordPositionX, ScoreBoard scoreBoard) {
+    public PipeGenerator(I2DGameContext context, float bordPositionX, ScoreBoard scoreBoard) {
         BORD_POSITION_X = bordPositionX;
         SCOREBOARD = scoreBoard;
 

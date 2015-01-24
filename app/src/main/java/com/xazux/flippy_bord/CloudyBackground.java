@@ -3,6 +3,7 @@ package com.xazux.flippy_bord;
 import android.graphics.Canvas;
 import android.graphics.Color;
 
+import com.xazux._2dlib.I2DGameContext;
 import com.xazux._2dlib.JMath;
 import com.xazux._2dlib._2DGameActivity;
 import com.xazux._2dlib.sprites.components.CRect;
@@ -20,7 +21,7 @@ public class CloudyBackground {
     private final int _backColour = Color.rgb(81, 172, 230);
     private final ArrayList<Cloud> _clouds = new ArrayList<>();
 
-    public CloudyBackground(_2DGameActivity context) {
+    public CloudyBackground(I2DGameContext context) {
         SCREENSIZE = context.getScreenDimensions();
         TX_CLOUD = new Texture(context.loadBitmap(R.drawable.cloud));
         DISTANCE_BETWEEN_CLOUDS = SCREENSIZE.getWidth() * 0.25f;
@@ -83,9 +84,7 @@ public class CloudyBackground {
 
         public boolean update(float elapsedSeconds) {
             _area.offsetBy(_speed * elapsedSeconds, 0);
-            if (_area.getRight() < 0)
-                return true;
-            return false;
+            return (_area.getRight() < 0);
         }
     }
 }

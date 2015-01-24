@@ -7,7 +7,7 @@ import android.view.SurfaceView;
 /**
  * Created by josh on 06/01/15.
  */
-public class _2DSurfaceView extends SurfaceView {
+class _2DSurfaceView extends SurfaceView {
 
     public _2DSurfaceView(Context context) {
         super(context);

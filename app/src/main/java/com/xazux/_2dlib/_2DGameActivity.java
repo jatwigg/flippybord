@@ -11,13 +11,17 @@ import android.view.SurfaceHolder;
 
 import com.xazux._2dlib.components.GameTime;
 import com.xazux._2dlib.sprites.components.CRect;
+import com.xazux._2dlib.states.GameState;
+import com.xazux._2dlib.states.StateStore;
 import com.xazux._2dlib.touch.MainTouchHandle;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
-public abstract class _2DGameActivity extends Activity
-{
-	private MainThread _thread;
+public abstract class _2DGameActivity extends Activity implements I2DGameContext {
+    private MainThread _thread;
     private _2DSurfaceView _surfaceView;
     private boolean _bInitalized = false;
     private MainTouchHandle _mainTouchHandle = new MainTouchHandle();

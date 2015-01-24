@@ -136,15 +136,11 @@ public class MainThread extends Thread
 						// if sleepTime > 0 we're OK
 						try 
 						{
-							// send the thread to sleep for a short period
-							// very useful for battery saving
-                            Log.d("SLEEP", sleepTime + ".");
 							Thread.sleep(sleepTime);
 						} catch (InterruptedException e) {}
 					}
 					
 					while (sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS && running) {
-                        Log.d(getClass().getSimpleName(), "sleepTime=" + sleepTime + ". framePeriod=" + FRAME_PERIOD_MILLS + ". timeDiff=" + timeDiff);
                         // we need to catch up
                         m_gameTime.Clear();
                         this._gameActivity.onUpdate(m_gameTime); // update without rendering

@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 import com.xazux._2dlib.Helper;
+import com.xazux._2dlib.I2DGameContext;
 import com.xazux._2dlib._2DGameActivity;
 import com.xazux._2dlib.sprites.components.CRect;
 
@@ -16,7 +17,7 @@ public class ScoreBoard {
     private int _score = 0;
     private Paint _paint, _paintForeground;
 
-    public ScoreBoard(_2DGameActivity context) {
+    public ScoreBoard(I2DGameContext context) {
         CRect screenSize = context.getScreenDimensions();
         float hW = screenSize.getWidth() * 0.1f, hH = hW;
         _position = CRect.CreateUsingWidthAndHeight(screenSize.getCenterX() - hW, screenSize.getHeight() * 0.25f, hW*2, hH*2);

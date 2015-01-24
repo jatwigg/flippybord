@@ -40,7 +40,6 @@ public class GameTime
 	public void Clear()
 	{
         long time = SystemClock.elapsedRealtime();
-        Log.d(getClass().getSimpleName(), "Clear() [" + time + "][" + _lastTime + "]");
         _currentDeltaMills = time - _lastTime;
         _currentDeltaSeconds = _currentDeltaMills / 1000.0f;
         _lastTime = time;
