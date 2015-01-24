@@ -4,10 +4,10 @@ import android.graphics.Canvas;
 
 import com.xazux._2dlib.I2DGameContext;
 import com.xazux._2dlib.JMath;
-import com.xazux._2dlib.components.GameTime;
 import com.xazux._2dlib.sprites.components.CRect;
 import com.xazux._2dlib.sprites.components.CollisionArea;
 import com.xazux._2dlib.sprites.components.Texture;
+import com.xazux._2dlib.time.IGameTime;
 import com.xazux.flippy_bord.R;
 
 import java.util.ArrayList;
@@ -23,6 +23,7 @@ public class PipeGenerator {
     private final float X_PIPE_SPACE, PIPE_WIDTH, SCROLL_SPEED, Y_PIPE_SPACE, BORD_POSITION_X;
     private final CRect BODY_RECT, OUTLET_RECT, SCREENSIZE;
     private final Random RANDOM = new Random();
+
     //TODO: clean this shitty class up
     public PipeGenerator(I2DGameContext context, float bordPositionX, ScoreBoard scoreBoard) {
         BORD_POSITION_X = bordPositionX;
@@ -50,16 +51,16 @@ public class PipeGenerator {
             p.render(canvas);
     }
 
-    public void update(GameTime gameTime) {
+    public void update(IGameTime gameTime) {
         float movement = SCROLL_SPEED * gameTime.getElapsedSeconds();
         for (int i = 0; i < _pipes.size(); ++i)
-           if (_pipes.get(i).update(movement)) {
+            if (_pipes.get(i).update(movement)) {
                 _pipes.remove(i--);
-           }
+            }
 
-        if (_pipes.size() == 0 || (SCREENSIZE.getRight() -  _pipes.get(_pipes.size() - 1)._areaOutlet.getRight()) > X_PIPE_SPACE) {
+        if (_pipes.size() == 0 || (SCREENSIZE.getRight() - _pipes.get(_pipes.size() - 1)._areaOutlet.getRight()) > X_PIPE_SPACE) {
 
-            float b1 = 100 + RANDOM.nextInt((int)(SCREENSIZE.getHeight() * 0.5f));
+            float b1 = 100 + RANDOM.nextInt((int) (SCREENSIZE.getHeight() * 0.5f));
             float t2 = b1 + Y_PIPE_SPACE;
 
             CRect p1 = new CRect(BODY_RECT.getLeft(), BODY_RECT.getTop(), BODY_RECT.getRight(), b1);
@@ -70,21 +71,18 @@ public class PipeGenerator {
         }
     }
 
-    public boolean intersects(CollisionArea cArea)
-    {
+    public boolean intersects(CollisionArea cArea) {
         for (Pipe pipe : _pipes)
             if (pipe.intersects(cArea))
                 return true;
         return false;
     }
 
-    private class Pipe
-    {
+    private class Pipe {
         private boolean _hasPassedBord = false;
         private CRect _areaOutlet, _areaBody;
 
-        public Pipe(CRect area, boolean isTop)
-        {
+        public Pipe(CRect area, boolean isTop) {
             _areaBody = area;
             _areaOutlet = OUTLET_RECT.clone();
             if (isTop) {
@@ -92,15 +90,13 @@ public class PipeGenerator {
                 _areaOutlet.setRotationDegrees(180);
                 _areaBody.offsetBy(0, _areaOutlet.getHeight() * -0.5f);
                 _areaBody.setRotationDegrees(180);
-            }
-            else {
+            } else {
                 _areaOutlet.offsetTo(_areaBody.getLeft(), _areaBody.getTop());
                 _areaBody.offsetBy(0, _areaOutlet.getHeight() * 0.5f);
             }
         }
 
-        public boolean update(float movement)
-        {
+        public boolean update(float movement) {
             _areaOutlet.offsetBy(movement, 0);
             _areaBody.offsetBy(movement, 0);
             if (_areaOutlet.getRight() < 0)
@@ -113,8 +109,7 @@ public class PipeGenerator {
             return false;
         }
 
-        public void render(Canvas canvas)
-        {
+        public void render(Canvas canvas) {
             TX_BODY.render(canvas, _areaBody);
             TX_OUTLET.render(canvas, _areaOutlet);
         }

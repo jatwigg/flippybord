@@ -11,5 +11,6 @@ public class ActivityFlippyBord extends _2DGameActivityWithStates {
     public void onInit() {
         RegisterGameState(StateSplash.class);
         RegisterGameState(StateScrollGame.class);
+        RegisterTransition(LoadingGame.class, StateScrollGame.class);
     }
 }

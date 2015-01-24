@@ -2,23 +2,18 @@ package com.xazux.flippy_bord.stategame;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.LightingColorFilter;
-import android.graphics.Paint;
 
+import com.xazux._2dlib.JMath;
 import com.xazux._2dlib._2DGameActivityWithStates;
-import com.xazux._2dlib.components.GameTime;
-import com.xazux._2dlib.components.Vector2D;
-import com.xazux._2dlib.particlesystem.Emitter;
-import com.xazux._2dlib.particlesystem.EmitterCone;
 import com.xazux._2dlib.sprites.Sprite;
 import com.xazux._2dlib.sprites.TouchableSprite;
-import com.xazux._2dlib.sprites.components.Animation;
 import com.xazux._2dlib.sprites.components.CRect;
+import com.xazux._2dlib.sprites.components.PaintBuilder;
 import com.xazux._2dlib.sprites.components.Texture;
 import com.xazux._2dlib.states.GameState;
-import com.xazux._2dlib.touch.TouchState;
+import com.xazux._2dlib.time.IGameTime;
 import com.xazux.flippy_bord.R;
+import com.xazux.flippy_bord.components.StartButton;
 
 /**
  * Created by josh on 23/01/15.
@@ -33,59 +28,25 @@ public class StateSplash extends GameState {
 
     @Override
     public void initialize() {
+        // background image
         Texture backTx = new Texture(loadBitmap(R.drawable.background), false);
         _background = new Sprite(backTx, getScreenDimensions());
 
-        CRect ss = getScreenDimensions();
+        // start button
+        Texture startTx = new Texture(loadBitmap(R.drawable.start),
+                PaintBuilder.create().setColor(Color.BLACK).setAntiAlias(true).getPaint());
 
-        Texture startTx = new Texture(loadBitmap(R.drawable.start));
-        startTx.getPaint().setColor(Color.BLACK);
-        startTx.getPaint().setAntiAlias(true);
-        float w = ss.getWidth() * 0.5f, h = startTx.getHeightIfWidthIs((int)(w + 0.5f));
+        CRect screenDimensions = getScreenDimensions();
 
-        CRect startRect = new CRect(
-                ss.getCenterX() - (w * 0.5f),
-                ss.getCenterY() - (h * 0.5f),
-                ss.getCenterX() + (w * 0.5f),
-                ss.getCenterY() + (h * 0.5f));
+        float width = screenDimensions.getWidth() * 0.5f;
+        float height = startTx.getHeightIfWidthIs(JMath.Round(width));
+        CRect startRect = new CRect(0, 0, width, height);
+        startRect.offsetSoCenterIs(screenDimensions.getCenterX(), screenDimensions.getCenterY());
 
-        final Paint startPaintPressed = new Paint();
-        startPaintPressed.setAntiAlias(true);
-        startPaintPressed.setColor(Color.WHITE);
-        ColorFilter filter = new LightingColorFilter(Color.RED, 0);
-        startPaintPressed.setColorFilter(filter);
-
-        _startButton = new TouchableSprite(startTx, startRect) {
-            private boolean startTouched = false;
+        _startButton = new StartButton(startTx, startRect) {
             @Override
-            public void OnTouchMove(TouchState event) {
-                startTouched = getCollisionArea().containsPoint(event.X, event.Y);
-            }
-
-            @Override
-            public void OnTouchStart(TouchState event) {
-                startTouched = true;
-            }
-
-            @Override
-            public void OnTouchOver(TouchState event) {
-                startTouched = false;
-                if (getCollisionArea().containsPoint(event.X, event.Y)) {
-                    switchState(StateScrollGame.class);
-                }
-            }
-
-            @Override
-            public void OnTouchCancel() {
-                startTouched = false;
-            }
-
-            @Override
-            public void render(Canvas canvas) {
-                if (startTouched)
-                    getTexture().render(canvas, getCollisionArea(), startPaintPressed);
-                else
-                    getTexture().render(canvas, getCollisionArea());
+            public void onPress() {
+                switchState(StateScrollGame.class);
             }
         };
 
@@ -99,7 +60,7 @@ public class StateSplash extends GameState {
     }
 
     @Override
-    public void update(GameTime gameTime) {
+    public void update(IGameTime gameTime) {
 
     }
 

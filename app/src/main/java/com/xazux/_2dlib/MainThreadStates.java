@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
 
-import com.xazux._2dlib.components.GameTime;
+import com.xazux._2dlib.time.GameTime;
 
 /**
  * Created by josh on 23/01/15.
@@ -32,8 +32,7 @@ public class MainThreadStates extends Thread {
     private boolean hasFinished = false;
     private final int CORNFLOURBLUE = Color.rgb(100, 149, 237);
 
-    public void setRunning(boolean run)
-    {
+    public void setRunning(boolean run) {
         this.running = run;
     }
 
@@ -59,9 +58,9 @@ public class MainThreadStates extends Thread {
         Canvas canvas;
         Log.d(getClass().getSimpleName(), "Starting game loop");
 
-        long timeDiff;		// the time it took for the cycle to execute
-        long sleepTime;		// ms to sleep (<0 if we're behind)
-        int framesSkipped;	// number of frames being skipped
+        long timeDiff;        // the time it took for the cycle to execute
+        long sleepTime;        // ms to sleep (<0 if we're behind)
+        int framesSkipped;    // number of frames being skipped
 
         int framePS = 0;      //frame count
         int skippedPS = 0;
@@ -70,8 +69,7 @@ public class MainThreadStates extends Thread {
         long debugCount = 0;
         boolean isPendingStateChange;
 
-        while (running)
-        {
+        while (running) {
             canvas = null;
             isPendingStateChange = this._gameActivity.isPendingStateSwitch();
             if (!isPendingStateChange) {
@@ -103,14 +101,8 @@ public class MainThreadStates extends Thread {
 
                     m_gameTime.Clear();
 
-                    framesSkipped = 0;	// resetting the frames skipped
-                    // update game state
-/*
-					this._gameActivity.onUpdate(m_gameTime);
-					m_gameTime.Clear();
- */
-                    // render state to the screen
-                    // draws the canvas on the panel
+                    framesSkipped = 0;    // resetting the frames skipped
+
                     canvas.drawColor(CORNFLOURBLUE);
                     this._gameActivity.onDraw(canvas);
 
@@ -123,7 +115,7 @@ public class MainThreadStates extends Thread {
                             skippedPS = framePS = 0;
                             debugCount++;
                         }
-                        canvas.drawText("DEBUG(" + debugCount + ") FPS:" + lastFPS + ". SKIPPED:" + skippedPS, 10,60, _debugInfo);
+                        canvas.drawText("DEBUG(" + debugCount + ") FPS:" + lastFPS + ". SKIPPED:" + skippedPS, 10, 60, _debugInfo);
                     }
 
                     // unlock canvas to not create a starvation issue
@@ -142,23 +134,23 @@ public class MainThreadStates extends Thread {
                     // calculate sleep time
                     sleepTime = FRAME_PERIOD_MILLS - timeDiff;
 
-                    if (sleepTime > 0)
-                    {
+                    if (sleepTime > 0) {
                         // if sleepTime > 0 we're OK
-                        try
-                        {
+                        try {
                             Thread.sleep(sleepTime);
-                        } catch (InterruptedException e) {}
+                        } catch (InterruptedException e) {
+                        }
                     }
 
                     while (sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS && running) {
                         // we need to catch up
                         m_gameTime.Clear();
+                        this._gameActivity.getTouchHandler().onUpdate();
                         this._gameActivity.onUpdate(m_gameTime); // update without rendering
                         if (DEBUG) {
                             elapsedPS += m_gameTime.getElapsedMills();
                         }
-                        sleepTime += FRAME_PERIOD_MILLS;	// add frame period to check if in next frame
+                        sleepTime += FRAME_PERIOD_MILLS;    // add frame period to check if in next frame
                         framesSkipped++;
                         skippedPS++;
                     }
@@ -169,14 +161,13 @@ public class MainThreadStates extends Thread {
                 if (canvas != null) {
                     _gameActivity.getHolder().unlockCanvasAndPost(canvas);
                 }
-            }	// end finally
+            }    // end finally
             hasFinished = true;
         }
         Log.d(getClass().getSimpleName(), "Ended game loop.");
     }
 
-    public boolean hasFinished()
-    {
+    public boolean hasFinished() {
         return hasFinished;
     }
 

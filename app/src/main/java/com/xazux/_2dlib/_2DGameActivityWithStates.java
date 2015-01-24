@@ -2,7 +2,6 @@ package com.xazux._2dlib;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,16 +10,15 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
-import com.xazux._2dlib.components.GameTime;
 import com.xazux._2dlib.sprites.components.CRect;
 import com.xazux._2dlib.states.GameState;
 import com.xazux._2dlib.states.StateStore;
+import com.xazux._2dlib.time.IGameTime;
 import com.xazux._2dlib.touch.MainTouchHandle;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by josh on 23/01/15.
@@ -30,6 +28,8 @@ public abstract class _2DGameActivityWithStates extends Activity implements I2DG
     private final ArrayList<Class<?>> _states = new ArrayList<>();
     private Class<?> _desiredState = null;
     private GameState _currentState = null;
+
+    private final ArrayList<Tuple<Class<?>, Class<?>>> _transitionStates = new ArrayList<>(); //T.1 = transition, T.2 = state to show transition before
 
     private MainThreadStates _thread;
     private _2DSurfaceView _surfaceView;
@@ -100,29 +100,33 @@ public abstract class _2DGameActivityWithStates extends Activity implements I2DG
     }
 
     private GameState invoke(Class<?> clazz) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        Constructor<?> ctor = clazz.getConstructor( _2DGameActivityWithStates.class); //this class is the constructor param
-        return (GameState) ctor.newInstance(new Object[] { this });
+        Constructor<?> ctor = clazz.getConstructor(_2DGameActivityWithStates.class); //this class is the constructor param
+        return (GameState) ctor.newInstance(new Object[]{this});
     }
 
-    public StateStore getStateStore()
-    {
+
+    protected void RegisterTransition(Class<?> transition, Class<?> afterTransition) {
+        _transitionStates.add(new Tuple<Class<?>, Class<?>>(transition, afterTransition));
+        //TODO: implement transitions
+    }
+
+    public StateStore getStateStore() {
         return _stateStore;
     }
 
-    boolean isPendingStateSwitch()
-    {
+    boolean isPendingStateSwitch() {
         return _desiredState != null;
     }
 
     public void beginStateSwitch() {
         if (_currentState != null) {
             _currentState.destroy();
+            getTouchHandler().clear(); //remove any touch listeners
             _currentState = null;
         }
         try {
             _currentState = invoke(_desiredState);
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Exception raised trying to change state:\n" + e.toString());
         }
@@ -134,8 +138,7 @@ public abstract class _2DGameActivityWithStates extends Activity implements I2DG
         _thread.setFPS(fps);
     }
 
-    public SurfaceHolder getHolder()
-    {
+    public SurfaceHolder getHolder() {
         return _surfaceView.getHolder();
     }
 
@@ -143,26 +146,22 @@ public abstract class _2DGameActivityWithStates extends Activity implements I2DG
         return _bInitalized;
     }
 
-    void onUpdate(GameTime gameTime)
-    {
+    void onUpdate(IGameTime gameTime) {
         _currentState.update(gameTime);
     }
 
     void onDraw(Canvas canvas) {
-        if (isPendingStateSwitch())
-        {
+        if (isPendingStateSwitch()) {
             canvas.drawColor(Color.BLACK);
             Helper.RenderTextCenterCRectShadow(canvas, _paint, _paintFore, "Loading, please wait.", getScreenDimensions());
-        }
-        else {
+        } else {
             _currentState.render(canvas);
         }
     }
 
     public abstract void onInit();
 
-    void doInit()
-    {
+    void doInit() {
         if (_bInitalized)
             Log.e(this.getClass().getSimpleName(), "doInit() has been called more than once!");
         Log.d(this.getClass().getSimpleName(), "Begin initalizing activity.");
@@ -173,15 +172,14 @@ public abstract class _2DGameActivityWithStates extends Activity implements I2DG
 
     @Override
     public void onBackPressed() {
-        if (_currentState != null && _currentState.onBackPressed()){
+        if (_currentState != null && _currentState.onBackPressed()) {
             return; // current state returned true, so it handled it
         }
         finish();
     }
 
     @Deprecated
-    public Bitmap loadBitmap(int cloud)
-    {
+    public Bitmap loadBitmap(int cloud) {
         throw new RuntimeException("Use the state current state's loadBitmap function.");
     }
 }

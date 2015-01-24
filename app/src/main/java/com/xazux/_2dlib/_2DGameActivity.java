@@ -9,15 +9,10 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
-import com.xazux._2dlib.components.GameTime;
 import com.xazux._2dlib.sprites.components.CRect;
-import com.xazux._2dlib.states.GameState;
-import com.xazux._2dlib.states.StateStore;
+import com.xazux._2dlib.time.IGameTime;
 import com.xazux._2dlib.touch.MainTouchHandle;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class _2DGameActivity extends Activity implements I2DGameContext {
@@ -66,6 +61,7 @@ public abstract class _2DGameActivity extends Activity implements I2DGameContext
     public MainTouchHandle getTouchHandler() {
         return _mainTouchHandle;
     }
+
     public CRect getScreenDimensions() {
         return Helper.GetScreenDimensions(this);
     }
@@ -78,8 +74,7 @@ public abstract class _2DGameActivity extends Activity implements I2DGameContext
         return bitmap;
     }
 
-    void doInit()
-    {
+    void doInit() {
         if (_bInitalized)
             Log.e(this.getClass().getSimpleName(), "doInit() has been called more than once!");
         Log.d(this.getClass().getSimpleName(), "Begin initalizing activity.");
@@ -90,7 +85,7 @@ public abstract class _2DGameActivity extends Activity implements I2DGameContext
 
     public abstract void onInit();
 
-    public abstract void onUpdate(GameTime gameTime);
+    public abstract void onUpdate(IGameTime gameTime);
 
     public abstract void onDraw(Canvas canvas);
 
@@ -100,8 +95,7 @@ public abstract class _2DGameActivity extends Activity implements I2DGameContext
         _thread.setFPS(fps);
     }
 
-    public SurfaceHolder getHolder()
-    {
+    public SurfaceHolder getHolder() {
         return _surfaceView.getHolder();
     }
 

@@ -6,7 +6,6 @@ import android.graphics.Paint;
 
 import com.xazux._2dlib.Helper;
 import com.xazux._2dlib.I2DGameContext;
-import com.xazux._2dlib._2DGameActivity;
 import com.xazux._2dlib.sprites.components.CRect;
 
 /**
@@ -20,7 +19,7 @@ public class ScoreBoard {
     public ScoreBoard(I2DGameContext context) {
         CRect screenSize = context.getScreenDimensions();
         float hW = screenSize.getWidth() * 0.1f, hH = hW;
-        _position = CRect.CreateUsingWidthAndHeight(screenSize.getCenterX() - hW, screenSize.getHeight() * 0.25f, hW*2, hH*2);
+        _position = CRect.CreateUsingWidthAndHeight(screenSize.getCenterX() - hW, screenSize.getHeight() * 0.25f, hW * 2, hH * 2);
 
         _paint = new Paint();
         _paint.setAntiAlias(true);
@@ -34,7 +33,7 @@ public class ScoreBoard {
     }
 
     public void render(Canvas canvas) {
-        Helper.RenderTextCenterCRectShadow(canvas, _paint, _paintForeground, (_score/2) + "", _position);
+        Helper.RenderTextCenterCRectShadow(canvas, _paint, _paintForeground, (_score / 2) + "", _position);
     }
 
     public void scorePipePass() {

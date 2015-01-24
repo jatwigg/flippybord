@@ -3,14 +3,14 @@ package com.xazux.flippy_bord.activitygame;
 import android.graphics.Canvas;
 
 import com.xazux._2dlib._2DGameActivity;
-import com.xazux._2dlib.components.GameTime;
 import com.xazux._2dlib.sprites.components.CollisionArea;
+import com.xazux._2dlib.time.IGameTime;
 import com.xazux._2dlib.touch.TouchState;
 import com.xazux._2dlib.touch.Touchable;
+import com.xazux.flippy_bord.R;
 import com.xazux.flippy_bord.components.Bord;
 import com.xazux.flippy_bord.components.CloudyBackground;
 import com.xazux.flippy_bord.components.PipeGenerator;
-import com.xazux.flippy_bord.R;
 import com.xazux.flippy_bord.components.ScoreBoard;
 
 /**
@@ -35,7 +35,7 @@ public class Game extends _2DGameActivity implements Touchable {
     }
 
     @Override
-    public void onUpdate(GameTime gameTime) {
+    public void onUpdate(IGameTime gameTime) {
         if (_started && !_gameover) {
             _pipes.update(gameTime);
             _gameover = _pipes.intersects(_bord.getCollisionArea());
@@ -79,8 +79,7 @@ public class Game extends _2DGameActivity implements Touchable {
             _started = true;
             _bord.gamebegin();
             _bord.flap();
-        }
-        else if (!_gameover) {
+        } else if (!_gameover) {
             _bord.flap();
         }
     }

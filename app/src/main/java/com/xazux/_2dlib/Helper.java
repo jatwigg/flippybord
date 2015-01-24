@@ -21,11 +21,11 @@ public class Helper {
         Point size = new Point();
         WindowManager w = activity.getWindowManager();
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             w.getDefaultDisplay().getSize(size);
             Measuredwidth = size.x;
             Measuredheight = size.y;
-        }else{
+        } else {
             Display d = w.getDefaultDisplay();
             Measuredwidth = d.getWidth();
             Measuredheight = d.getHeight();
@@ -34,6 +34,7 @@ public class Helper {
     }
 
     private static RectF bounds = new RectF();
+
     public static void RenderTextCenterCRect(Canvas canvas, Paint paint, String text, CRect areaRect) {
 
         bounds = new RectF(areaRect.getLeft(), areaRect.getTop(), areaRect.getRight(), areaRect.getBottom());

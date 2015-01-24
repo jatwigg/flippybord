@@ -5,7 +5,6 @@ import android.graphics.Color;
 
 import com.xazux._2dlib.I2DGameContext;
 import com.xazux._2dlib.JMath;
-import com.xazux._2dlib._2DGameActivity;
 import com.xazux._2dlib.sprites.components.CRect;
 import com.xazux._2dlib.sprites.components.Texture;
 import com.xazux.flippy_bord.R;
@@ -28,41 +27,35 @@ public class CloudyBackground {
         DISTANCE_BETWEEN_CLOUDS = SCREENSIZE.getWidth() * 0.25f;
     }
 
-    public void update(float elapsedSeconds)
-    {
+    public void update(float elapsedSeconds) {
         Cloud lastCloud = null, cloud;
-        for(int i = 0; i < _clouds.size(); ++i) {
+        for (int i = 0; i < _clouds.size(); ++i) {
             cloud = _clouds.get(i);
             if (cloud.update(elapsedSeconds)) {
                 _clouds.remove(i--);
-            }
-            else if (lastCloud == null || lastCloud._area.getRight() < cloud._area.getRight()) {
+            } else if (lastCloud == null || lastCloud._area.getRight() < cloud._area.getRight()) {
                 lastCloud = _clouds.get(i);
             }
         }
-        if (_clouds.size() == 0 || (SCREENSIZE.getRight() - lastCloud._area.getRight() ) > DISTANCE_BETWEEN_CLOUDS)
-        {
+        if (_clouds.size() == 0 || (SCREENSIZE.getRight() - lastCloud._area.getRight()) > DISTANCE_BETWEEN_CLOUDS) {
             _clouds.add(new Cloud());
         }
     }
 
-    public void render(Canvas canvas)
-    {
+    public void render(Canvas canvas) {
         canvas.drawColor(_backColour);
         for (Cloud cloud : _clouds)
             cloud.render(canvas);
     }
 
-    private class Cloud
-    {
+    private class Cloud {
         private float _speed;
         private CRect _area;
 
         public Cloud() {
             float w;
             int r = JMath.GetRandom().nextInt(3);
-            switch (r)
-            {
+            switch (r) {
                 case 0:
                     w = SCREENSIZE.getWidth() * 0.1f;
                     _speed = SCREENSIZE.getWidth() * -0.05f;
@@ -76,7 +69,7 @@ public class CloudyBackground {
                     _speed = SCREENSIZE.getWidth() * -0.125f;
                     break;
             }
-            _area = CRect.CreateUsingWidthAndHeight(SCREENSIZE.getRight(), JMath.GetRandom().nextInt((int)(SCREENSIZE.getHeight() * 0.7f)), w, TX_CLOUD.getHeightIfWidthIs(JMath.Round(w)));
+            _area = CRect.CreateUsingWidthAndHeight(SCREENSIZE.getRight(), JMath.GetRandom().nextInt((int) (SCREENSIZE.getHeight() * 0.7f)), w, TX_CLOUD.getHeightIfWidthIs(JMath.Round(w)));
         }
 
         public void render(Canvas canvas) {

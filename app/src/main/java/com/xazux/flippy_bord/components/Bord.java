@@ -4,12 +4,11 @@ import android.graphics.Canvas;
 
 import com.xazux._2dlib.I2DGameContext;
 import com.xazux._2dlib.JMath;
-import com.xazux._2dlib._2DGameActivity;
-import com.xazux._2dlib.components.GameTime;
 import com.xazux._2dlib.sprites.components.Animation;
 import com.xazux._2dlib.sprites.components.CCircle;
 import com.xazux._2dlib.sprites.components.CRect;
 import com.xazux._2dlib.sprites.components.CollisionArea;
+import com.xazux._2dlib.time.IGameTime;
 import com.xazux.flippy_bord.R;
 
 /**
@@ -38,7 +37,7 @@ public class Bord {
         _collisionArea = new CCircle(_drawArea.getCenterX(), _drawArea.getCenterY(), _drawArea.getRadius() * 0.7f);
     }
 
-    public void update(GameTime gameTime) {
+    public void update(IGameTime gameTime) {
         if (_started) {
 
             _ySpeed = JMath.Clamp(_ySpeed + (GRAVITY * gameTime.getElapsedSeconds()), _yFlapSpeedSeconds, GRAVITY);
@@ -50,12 +49,10 @@ public class Bord {
             if (yPos > _screenHeight) {
                 float f = _screenHeight - _drawArea.getBottom();
                 _drawArea.offsetBy(0, f);
-            }
-            else if (yPos < _drawArea.getHeight()) {
+            } else if (yPos < _drawArea.getHeight()) {
                 float f = _drawArea.getTop() * -1.0f;
                 _drawArea.offsetBy(0, f);
-            }
-            else {
+            } else {
                 _drawArea.offsetBy(0, distanceTraveled);
             }
 

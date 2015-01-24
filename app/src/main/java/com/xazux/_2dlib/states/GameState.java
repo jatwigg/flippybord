@@ -6,8 +6,8 @@ import android.graphics.Canvas;
 
 import com.xazux._2dlib.I2DGameContext;
 import com.xazux._2dlib._2DGameActivityWithStates;
-import com.xazux._2dlib.components.GameTime;
 import com.xazux._2dlib.sprites.components.CRect;
+import com.xazux._2dlib.time.IGameTime;
 import com.xazux._2dlib.touch.MainTouchHandle;
 
 import java.util.HashMap;
@@ -47,12 +47,11 @@ public abstract class GameState implements I2DGameContext {
 
     public abstract void render(Canvas canvas);
 
-    public abstract void update(GameTime gameTime);
+    public abstract void update(IGameTime gameTime);
 
     public abstract void destroy();
 
-    public boolean onBackPressed()
-    {
+    public boolean onBackPressed() {
         return false;
     }
 
