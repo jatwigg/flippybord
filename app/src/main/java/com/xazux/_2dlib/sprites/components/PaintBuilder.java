@@ -1,5 +1,6 @@
 package com.xazux._2dlib.sprites.components;
 
+import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 
@@ -7,6 +8,7 @@ import android.graphics.Paint;
  * Created by josh on 24/01/15.
  */
 public class PaintBuilder {
+    public static final int CORN_FLOUR_BLUE = Color.rgb(100, 149, 237); // thanks XNA
     private final Paint _paint;
 
     protected PaintBuilder(Paint paint) {

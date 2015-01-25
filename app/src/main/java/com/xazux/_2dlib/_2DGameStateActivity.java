@@ -2,7 +2,7 @@ package com.xazux._2dlib;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
+import android.util.Log;
 
 import com.xazux._2dlib.states.GameState;
 import com.xazux._2dlib.states.StateStore;
@@ -15,14 +15,17 @@ import java.util.ArrayList;
 /**
  * Created by josh on 23/01/15.
  */
-public abstract class _2DGameStateActivity extends _2DGameActivityBase implements I2DGameContext, I2DGameActivity {
+public abstract class _2DGameStateActivity extends _2DGameActivityBase implements I2DGameContext, I2DGameActivity, Runnable {
 
     private final ArrayList<Class<?>> _states = new ArrayList<>();
     private final ArrayList<Tuple<Class<?>, Class<?>>> _transitionStates = new ArrayList<>(); //T.1 = transition, T.2 = state to show transition before
-    private Class<?> _desiredState = null;
-    private GameState _currentState = null;
-
+    private volatile Class<?> _desiredState = null;
+    private volatile GameState _currentState = null;
+    private volatile GameState _transitionState = null;
+    private volatile boolean _currentlySwitchingStates = false;
     private StateStore _stateStore = new StateStore();
+
+    ///region game state handling
 
     protected void RegisterGameState(Class<?> state) {
         if (_states.size() == 0) {
@@ -32,10 +35,12 @@ public abstract class _2DGameStateActivity extends _2DGameActivityBase implement
     }
 
     public void switchState(Class<?> toState) {
+        if (toState == null)
+            finish();
         _desiredState = toState;
     }
 
-    private GameState invoke(Class<?> clazz) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    private GameState instantiate(Class<?> clazz) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         Constructor<?> ctor = clazz.getConstructor(_2DGameStateActivity.class); //this class is the constructor param
         return (GameState) ctor.newInstance(new Object[]{this});
     }
@@ -43,11 +48,6 @@ public abstract class _2DGameStateActivity extends _2DGameActivityBase implement
 
     protected void RegisterTransition(Class<?> transition, Class<?> afterTransition) {
         _transitionStates.add(new Tuple<Class<?>, Class<?>>(transition, afterTransition));
-        //TODO: implement transitions
-    }
-
-    public StateStore getStateStore() {
-        return _stateStore;
     }
 
     boolean isPendingStateSwitch() {
@@ -55,28 +55,68 @@ public abstract class _2DGameStateActivity extends _2DGameActivityBase implement
     }
 
     public void beginStateSwitch() {
+        _currentlySwitchingStates = true;
+        //check for transitional state
+        for (Tuple<Class<?>, Class<?>> tuple : _transitionStates) {
+            if (tuple.Item2.equals(_desiredState)) { //todo: check if this is the correct way to compare Class<?>
+                try {
+                    _transitionState = instantiate(tuple.Item1);
+                    _transitionState.initialize();
+                }
+                catch (Exception e) {
+                    Log.e(getClass().getSimpleName(), "exception raised trying to create transition.", e);
+                }
+                break;
+            }
+        }
+
+        // destroy old state and initialise the new state in another thread
+        Thread thread = new Thread(this);
+        thread.start();
+    }
+
+    @Override
+    public final void run() {
         if (_currentState != null) {
             _currentState.destroy();
             getTouchHandler().clear(); //remove any touch listeners
             _currentState = null;
         }
         try {
-            _currentState = invoke(_desiredState);
+            Log.d(getClass().getSimpleName(), "instantiating the desired state " + _desiredState);
+            _currentState = instantiate(_desiredState);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Exception raised trying to change state:\n" + e.toString());
         }
         _currentState.initialize();
         _desiredState = null;
+        _currentlySwitchingStates = false;
     }
+
+    ///endregion
+
+    public StateStore getStateStore() {
+        return _stateStore;
+    }
+
+    public abstract void onInit();
 
     @Override
     public void onUpdate(IGameTime gameTime) {
         if (isPendingStateSwitch()) {
-            beginStateSwitch(); //TODO: fire this off in another thread
-            //TODO: update transitional state here
+            if (!_currentlySwitchingStates) {
+                beginStateSwitch();
+            }
+
+            if (_transitionState != null) {
+                _transitionState.update(gameTime);
+            }
         }
         else {
+            if (_transitionState != null) {
+                _transitionState = null;
+            }
             _currentState.update(gameTime);
         }
     }
@@ -84,14 +124,16 @@ public abstract class _2DGameStateActivity extends _2DGameActivityBase implement
     @Override
     public void onDraw(Canvas canvas) {
         if (isPendingStateSwitch()) {
-            canvas.drawColor(Color.BLACK);
-            //TODO: render the transition state
+            if (_transitionState != null) {
+                _transitionState.render(canvas);
+            }
         } else {
             _currentState.render(canvas);
         }
     }
 
-    public abstract void onInit();
+    @Override
+    public final void onFinished() { } // unused
 
     @Override
     public void onBackPressed() {
@@ -101,12 +143,8 @@ public abstract class _2DGameStateActivity extends _2DGameActivityBase implement
         finish();
     }
 
-    @Override
-    public void onFinished() { }
-
     @Deprecated
     public Bitmap loadBitmap(int cloud) {
         throw new RuntimeException("Use the state current state's loadBitmap function.");
     }
-
 }

@@ -4,13 +4,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.Log;
 
+import com.xazux._2dlib.sprites.components.PaintBuilder;
 import com.xazux._2dlib.time.GameTime;
 
 /**
  * Created by josh on 24/01/15.
  */
 public class GameLoopThread implements Runnable {
-    private final int CORN_FLOUR_BLUE = Color.rgb(100, 149, 237); // thanks XNA
     // timings
     private int _maxFPS = 32;
     private int _maxFrameSkips = 5;
@@ -67,7 +67,7 @@ public class GameLoopThread implements Runnable {
 
                 synchronized (this._gameActivity) { //TODO: investigate if this needs to be synchronized, as there should just be the one thread
                     // draw stuff
-                    canvas.drawColor(CORN_FLOUR_BLUE);
+                    canvas.drawColor(PaintBuilder.CORN_FLOUR_BLUE);
                     _gameActivity.render(canvas);
 
                     // unlock canvas to not create a starvation issue

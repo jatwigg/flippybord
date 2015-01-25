@@ -43,7 +43,12 @@ public class StateScrollGame extends GameState implements Touchable {
         _background.render(canvas);
         _pipes.render(canvas);
         _bord.render(canvas);
-        _scoreBoard.render(canvas);
+        if (_gameover) {
+            _scoreBoard.renderFinalBoard(canvas);
+        }
+        else {
+            _scoreBoard.render(canvas);
+        }
     }
 
     @Override
@@ -59,6 +64,12 @@ public class StateScrollGame extends GameState implements Touchable {
     @Override
     public void destroy() {
 
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        switchState(StateSplash.class); //TODO: switch to a high-scores state
+        return true;
     }
 
     @Override

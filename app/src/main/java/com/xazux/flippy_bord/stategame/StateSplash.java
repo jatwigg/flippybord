@@ -65,7 +65,5 @@ public class StateSplash extends GameState {
     }
 
     @Override
-    public void destroy() {
-
-    }
+    public void destroy() { }
 }
