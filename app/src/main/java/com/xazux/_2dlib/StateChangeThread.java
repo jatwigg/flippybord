@@ -5,9 +5,9 @@ package com.xazux._2dlib;
  */
 public class StateChangeThread extends Thread {
     private boolean _hasComplete = false;
-    private _2DGameActivityWithStates _context;
+    private _2DGameStateActivity _context;
 
-    public StateChangeThread(_2DGameActivityWithStates context) {
+    public StateChangeThread(_2DGameStateActivity context) {
         _context = context;
     }
 

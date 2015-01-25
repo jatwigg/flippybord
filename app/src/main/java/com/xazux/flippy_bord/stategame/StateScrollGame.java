@@ -2,7 +2,7 @@ package com.xazux.flippy_bord.stategame;
 
 import android.graphics.Canvas;
 
-import com.xazux._2dlib._2DGameActivityWithStates;
+import com.xazux._2dlib._2DGameStateActivity;
 import com.xazux._2dlib.sprites.components.CollisionArea;
 import com.xazux._2dlib.states.GameState;
 import com.xazux._2dlib.time.IGameTime;
@@ -24,7 +24,7 @@ public class StateScrollGame extends GameState implements Touchable {
     private boolean _started = false;
     private boolean _gameover = false;
 
-    public StateScrollGame(_2DGameActivityWithStates context) {
+    public StateScrollGame(_2DGameStateActivity context) {
         super(context);
     }
 

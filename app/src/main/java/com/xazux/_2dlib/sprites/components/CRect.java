@@ -3,6 +3,7 @@ package com.xazux._2dlib.sprites.components;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
 
 import com.xazux._2dlib.JMath;
 import com.xazux._2dlib.particlesystem.Vector2D;
@@ -171,5 +172,33 @@ public class CRect implements CollisionArea {
     @Override
     public String toString() {
         return "CRect l:" + getLeft() + ",t:" + getTop() + ",r:" + getRight() + ",b:" + getBottom() + ".";
+    }
+
+    private static RectF bounds = new RectF();
+
+    public void renderTextCenterCRect(Canvas canvas, Paint paint, String text) {
+        bounds = new RectF(getLeft(), getTop(), getRight(), getBottom());
+        // measure text width
+        bounds.right = paint.measureText(text, 0, text.length());
+        // measure text height
+        bounds.bottom = paint.descent() - paint.ascent();
+
+        bounds.left += (getWidth() - bounds.right) / 2.0f;
+        bounds.top += (getHeight() - bounds.bottom) / 2.0f;
+        canvas.drawText(text, bounds.left, bounds.top - paint.ascent(), paint);
+    }
+
+    public void renderTextCenterCRectShadow(Canvas canvas, Paint paint, Paint paintFore, String text) {
+        bounds = new RectF(getLeft(), getTop(), getRight(), getBottom());
+        // measure text width
+        bounds.right = paint.measureText(text, 0, text.length());
+        // measure text height
+        bounds.bottom = paint.descent() - paint.ascent();
+
+        bounds.left += (getWidth() - bounds.right) / 2.0f;
+        bounds.top += (getHeight() - bounds.bottom) / 2.0f;
+        for (int i = -5; i < 5; ++i)
+            canvas.drawText(text, bounds.left + i, (bounds.top - paint.ascent()) + i, paint);
+        canvas.drawText(text, bounds.left + 5, (bounds.top - paint.ascent()) + 5, paintFore);
     }
 }

@@ -4,8 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-import com.xazux._2dlib.Helper;
-import com.xazux._2dlib._2DGameActivityWithStates;
+import com.xazux._2dlib._2DGameStateActivity;
 import com.xazux._2dlib.sprites.components.CRect;
 import com.xazux._2dlib.sprites.components.PaintBuilder;
 import com.xazux._2dlib.states.GameState;
@@ -21,7 +20,7 @@ public class LoadingGame extends GameState {
     private CRect _screenDimensions;
     private float _elapsedSeconds;
 
-    public LoadingGame(_2DGameActivityWithStates context) {
+    public LoadingGame(_2DGameStateActivity context) {
         super(context);
     }
 
@@ -37,7 +36,7 @@ public class LoadingGame extends GameState {
     @Override
     public void render(Canvas canvas) {
         canvas.drawColor(Color.BLACK);
-        Helper.RenderTextCenterCRectShadow(canvas, _paintTextBack, _paintTextFore, _loadingText, _screenDimensions);
+        _screenDimensions.renderTextCenterCRectShadow(canvas, _paintTextBack, _paintTextFore, _loadingText);
     }
 
     @Override
@@ -53,7 +52,5 @@ public class LoadingGame extends GameState {
     }
 
     @Override
-    public void destroy() {
-
-    }
+    public void destroy() { }
 }

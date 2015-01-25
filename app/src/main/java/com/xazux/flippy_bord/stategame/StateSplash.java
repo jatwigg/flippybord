@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 
 import com.xazux._2dlib.JMath;
-import com.xazux._2dlib._2DGameActivityWithStates;
+import com.xazux._2dlib._2DGameStateActivity;
 import com.xazux._2dlib.sprites.Sprite;
 import com.xazux._2dlib.sprites.TouchableSprite;
 import com.xazux._2dlib.sprites.components.CRect;
@@ -22,7 +22,7 @@ public class StateSplash extends GameState {
     private Sprite _background;
     private TouchableSprite _startButton;
 
-    public StateSplash(_2DGameActivityWithStates context) {
+    public StateSplash(_2DGameStateActivity context) {
         super(context);
     }
 

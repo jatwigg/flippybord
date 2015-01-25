@@ -25,7 +25,7 @@ public class GameTime implements IGameTime {
     /*
      * ONLY CALL THIS FROM MAINTHREAD.JAVA
 	 * */
-    public void Clear() {
+    public void refresh() {
         long time = SystemClock.elapsedRealtime();
         _currentDeltaMills = time - _lastTime;
         _currentDeltaSeconds = _currentDeltaMills / 1000.0f;

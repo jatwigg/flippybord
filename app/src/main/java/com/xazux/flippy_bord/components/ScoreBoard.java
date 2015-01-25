@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-import com.xazux._2dlib.Helper;
 import com.xazux._2dlib.I2DGameContext;
 import com.xazux._2dlib.sprites.components.CRect;
 
@@ -33,7 +32,7 @@ public class ScoreBoard {
     }
 
     public void render(Canvas canvas) {
-        Helper.RenderTextCenterCRectShadow(canvas, _paint, _paintForeground, (_score / 2) + "", _position);
+        _position.renderTextCenterCRectShadow(canvas, _paint, _paintForeground, (_score / 2) + "");
     }
 
     public void scorePipePass() {

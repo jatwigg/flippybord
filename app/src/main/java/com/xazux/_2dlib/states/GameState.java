@@ -5,7 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
 import com.xazux._2dlib.I2DGameContext;
-import com.xazux._2dlib._2DGameActivityWithStates;
+import com.xazux._2dlib._2DGameStateActivity;
 import com.xazux._2dlib.sprites.components.CRect;
 import com.xazux._2dlib.time.IGameTime;
 import com.xazux._2dlib.touch.MainTouchHandle;
@@ -17,13 +17,13 @@ import java.util.HashMap;
  */
 public abstract class GameState implements I2DGameContext {
     private final HashMap<Integer, Bitmap> _bitmapMap = new HashMap<>();
-    private final _2DGameActivityWithStates _context;
+    private final _2DGameStateActivity _context;
 
-    public GameState(_2DGameActivityWithStates context) {
+    public GameState(_2DGameStateActivity context) {
         _context = context;
     }
 
-    public _2DGameActivityWithStates getContext() {
+    public _2DGameStateActivity getContext() {
         return _context;
     }
 
