@@ -78,6 +78,7 @@ public abstract class _2DGameStateActivity extends _2DGameActivityBase implement
     @Override
     public final void run() {
         if (_currentState != null) {
+            _currentState.soundEffectBox().destroy(); //TODO: get gamestate to do this in a pre-destroy() function, perhaps in a lower down class
             _currentState.destroy();
             getTouchHandler().clear(); //remove any touch listeners
             _currentState = null;

@@ -3,11 +3,13 @@ package com.xazux.flippy_bord.stategame;
 import android.graphics.Canvas;
 
 import com.xazux._2dlib._2DGameStateActivity;
+import com.xazux._2dlib.sound.SoundEffectBox;
 import com.xazux._2dlib.sprites.components.CollisionArea;
 import com.xazux._2dlib.states.GameState;
 import com.xazux._2dlib.time.IGameTime;
 import com.xazux._2dlib.touch.TouchState;
 import com.xazux._2dlib.touch.Touchable;
+import com.xazux.flippy_bord.R;
 import com.xazux.flippy_bord.components.Bord;
 import com.xazux.flippy_bord.components.CloudyBackground;
 import com.xazux.flippy_bord.components.PipeGenerator;
@@ -53,9 +55,17 @@ public class StateScrollGame extends GameState implements Touchable {
 
     @Override
     public void update(IGameTime gameTime) {
-        if (_started && !_gameover) {
-            _pipes.update(gameTime);
-            _gameover = _pipes.intersects(_bord.getCollisionArea());
+        if (_started) {
+            if (_gameover) {
+                _scoreBoard.update(gameTime);
+            }
+            else {
+                _pipes.update(gameTime);
+                if (_gameover = _pipes.intersects(_bord.getCollisionArea())) {
+                    // game over just happened
+                    soundEffectBox().playSound(R.raw.score_scroll_sound);
+                }
+            }
         }
         _background.update(gameTime.getElapsedSeconds());
         _bord.update(gameTime);
@@ -68,7 +78,7 @@ public class StateScrollGame extends GameState implements Touchable {
 
     @Override
     public boolean onBackPressed() {
-        switchState(StateSplash.class); //TODO: switch to a high-scores state
+        switchState(StateSplash.class);
         return true;
     }
 

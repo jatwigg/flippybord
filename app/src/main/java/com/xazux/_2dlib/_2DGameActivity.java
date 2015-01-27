@@ -16,4 +16,9 @@ public abstract class _2DGameActivity extends _2DGameActivityBase implements I2D
         _bitmapMap.put(id, bitmap);
         return bitmap;
     }
+
+    @Override
+    public void switchState(Class<?> toState) {
+        throw new RuntimeException("switchState is unsupported with " + getClass().getSimpleName() + ". Use " + _2DGameStateActivity.class.getSimpleName() + " for state support.");
+    }
 }

@@ -50,4 +50,9 @@ public class PaintBuilder {
         _paint.setTextSize(textSize);
         return this;
     }
+
+    public PaintBuilder setAlpha(int alpha) {
+        _paint.setAlpha(alpha);
+        return this;
+    }
 }
